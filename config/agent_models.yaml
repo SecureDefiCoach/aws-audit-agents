@@ -1,0 +1,128 @@
+# Agent Model Configuration
+# 
+# This file defines which LLM model each agent should use.
+# 
+# Strategy:
+# - Senior Auditors: GPT-5 for sophisticated reasoning and judgment
+# - Staff Auditors: GPT-4 Turbo for cost-effective routine tasks
+# - Audit Manager: GPT-4 Turbo for reviews and approvals
+#
+# Cost Optimization:
+# - GPT-5: $15/1M input tokens, $45/1M output tokens
+# - GPT-4 Turbo: $10/1M input tokens, $30/1M output tokens
+# - Estimated 30-40% cost savings vs all GPT-5
+
+# LLM Provider Settings
+provider: openai  # Options: openai, anthropic, ollama
+rate_limit: 10    # Max API calls per minute
+temperature: 0.7  # Sampling temperature (0.0-1.0)
+
+# Agent Model Assignments
+agents:
+  # Audit Manager
+  maurice:
+    name: Maurice
+    role: Audit Manager
+    model: gpt-4-turbo
+    rationale: Reviews and approvals don't require most advanced model
+  
+  # Senior Auditors (GPT-5 for complex reasoning)
+  esther:
+    name: Esther
+    role: Senior Auditor - IAM & Logical Access
+    model: gpt-5
+    control_domains:
+      - IAM
+      - Logical Access
+    staff_auditor: Hillel
+    rationale: Complex risk assessment and judgment calls require advanced reasoning
+  
+  chuck:
+    name: Chuck
+    role: CloudRetail IT Manager - Evidence Provider
+    model: gpt-4-turbo
+    company: CloudRetail Inc
+    responsibilities:
+      - Answer auditor questions
+      - Provide requested evidence
+      - Explain AWS configurations
+      - Coordinate with audit team
+    rationale: Company representative who provides evidence and answers questions from auditors
+  
+  victor:
+    name: Victor
+    role: Senior Auditor - Logging & Monitoring
+    model: gpt-5
+    control_domains:
+      - Logging
+      - Monitoring
+      - Incident Response
+    staff_auditor: Juman
+    rationale: Log analysis and incident detection benefit from advanced reasoning
+  
+  # Staff Auditors (GPT-4 Turbo for routine tasks)
+  hillel:
+    name: Hillel
+    role: Staff Auditor - IAM Support
+    model: gpt-4-turbo
+    reports_to: Esther
+    rationale: Evidence collection and routine testing are well-suited for GPT-4 Turbo
+  
+  neil:
+    name: Neil
+    role: Staff Auditor - Encryption & Network Support
+    model: gpt-4-turbo
+    reports_to: TBD  # Will be assigned based on risk assessment
+    rationale: Configuration checks and data gathering don't require GPT-5
+    note: Reporting structure pending - will be assigned to senior auditor based on controls selected
+  
+  juman:
+    name: Juman
+    role: Staff Auditor - Logging Support
+    model: gpt-4-turbo
+    reports_to: Victor
+    rationale: Log collection and basic analysis work well with GPT-4 Turbo
+
+# Alternative Configurations
+
+# Option 1: All GPT-5 (highest quality, highest cost)
+# all_gpt5:
+#   maurice: gpt-5
+#   esther: gpt-5
+#   chuck: gpt-5
+#   victor: gpt-5
+#   hillel: gpt-5
+#   neil: gpt-5
+#   juman: gpt-5
+
+# Option 2: All GPT-4 Turbo (balanced quality and cost)
+# all_gpt4_turbo:
+#   maurice: gpt-4-turbo
+#   esther: gpt-4-turbo
+#   chuck: gpt-4-turbo
+#   victor: gpt-4-turbo
+#   hillel: gpt-4-turbo
+#   neil: gpt-4-turbo
+#   juman: gpt-4-turbo
+
+# Option 3: Development with Ollama (free, local)
+# development:
+#   provider: ollama
+#   maurice: llama3
+#   esther: llama3
+#   chuck: llama3
+#   victor: llama3
+#   hillel: llama3
+#   neil: llama3
+#   juman: llama3
+
+# Option 4: Hybrid with Claude (for comparison)
+# hybrid_claude:
+#   provider: anthropic
+#   maurice: claude-3-sonnet
+#   esther: claude-3-opus  # Most capable
+#   chuck: claude-3-opus
+#   victor: claude-3-opus
+#   hillel: claude-3-haiku  # Most cost-effective
+#   neil: claude-3-haiku
+#   juman: claude-3-haiku

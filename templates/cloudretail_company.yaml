@@ -1,0 +1,434 @@
+# CloudRetail Inc - Simulated Company Template
+# This template defines a fictional e-commerce company with intentional security issues
+# for demonstration of AWS audit agent capabilities
+
+company_profile:
+  name: "CloudRetail Inc"
+  business_type: "E-commerce Platform"
+  description: "A mid-sized online retail company selling consumer electronics and home goods"
+  services:
+    - "Online storefront with product catalog"
+    - "Customer account management and order processing"
+    - "Inventory management and supplier integration"
+  employee_count: 150
+  annual_revenue: "$25M"
+  data_classification: "Confidential - Customer PII and payment data"
+  compliance_requirements:
+    - "PCI-DSS"
+    - "GDPR"
+    - "SOC 2 Type II"
+
+# IAM Users with intentional security issues mapped to ISACA control domains
+iam_users:
+  - username: "admin-john"
+    role: "System Administrator"
+    department: "IT Operations"
+    email: "john.admin@cloudretail.example.com"
+    access_level: "AdministratorAccess"
+    security_issues:
+      - type: "missing_mfa"
+        severity: "high"
+        control_domain: "Logical Access"
+        description: "Administrator account without MFA enabled"
+      - type: "root_account_usage"
+        severity: "critical"
+        control_domain: "Governance"
+        description: "Regular use of root account for daily operations"
+    create_access_key: true
+    last_login_days_ago: 2
+
+  - username: "dev-sarah"
+    role: "Senior Developer"
+    department: "Engineering"
+    email: "sarah.dev@cloudretail.example.com"
+    access_level: "PowerUserAccess"
+    security_issues:
+      - type: "overly_permissive_policy"
+        severity: "medium"
+        control_domain: "Logical Access"
+        description: "Developer with PowerUser access including ability to modify IAM"
+    create_access_key: true
+    last_login_days_ago: 1
+
+  - username: "analyst-mike"
+    role: "Data Analyst"
+    department: "Business Intelligence"
+    email: "mike.analyst@cloudretail.example.com"
+    access_level: "ReadOnlyAccess"
+    security_issues:
+      - type: "inactive_user"
+        severity: "low"
+        control_domain: "Logical Access"
+        description: "User account inactive for 90+ days but not disabled"
+    create_access_key: false
+    last_login_days_ago: 120
+
+  - username: "contractor-alex"
+    role: "External Consultant"
+    department: "External"
+    email: "alex.contractor@external.example.com"
+    access_level: "S3FullAccess"
+    security_issues:
+      - type: "no_expiration_date"
+        severity: "medium"
+        control_domain: "Logical Access"
+        description: "Contractor account with no expiration date or review schedule"
+      - type: "old_access_key"
+        severity: "medium"
+        control_domain: "Logical Access"
+        description: "Access key not rotated in 180+ days"
+    create_access_key: true
+    last_login_days_ago: 45
+
+  - username: "support-bot"
+    role: "Automated Support System"
+    department: "Customer Service"
+    email: "support-bot@cloudretail.example.com"
+    access_level: "Custom"
+    custom_policy:
+      - "dynamodb:GetItem"
+      - "dynamodb:Query"
+      - "ses:SendEmail"
+    security_issues:
+      - type: "embedded_credentials"
+        severity: "high"
+        control_domain: "Logical Access"
+        description: "Service account with long-lived access keys instead of IAM role"
+    create_access_key: true
+    last_login_days_ago: 0
+
+# S3 Buckets with mixed security configurations
+s3_buckets:
+  - name: "cloudretail-customer-data"
+    purpose: "Customer PII and order history"
+    data_classification: "Confidential"
+    size_mb: 250
+    security_configuration:
+      encryption: false  # INTENTIONAL ISSUE
+      versioning: false
+      public_access_block: true
+      logging_enabled: false  # INTENTIONAL ISSUE
+      lifecycle_policy: false
+    security_issues:
+      - type: "unencrypted_bucket"
+        severity: "critical"
+        control_domain: "Data Encryption"
+        description: "Bucket containing customer PII without encryption at rest"
+      - type: "no_access_logging"
+        severity: "high"
+        control_domain: "Logging"
+        description: "No S3 access logging enabled for audit trail"
+      - type: "no_versioning"
+        severity: "medium"
+        control_domain: "Disaster Recovery"
+        description: "No versioning enabled for data recovery"
+    sample_files:
+      - "customers/customer_profiles.json"
+      - "orders/order_history_2024.csv"
+      - "payments/transaction_log.json"
+
+  - name: "cloudretail-application-logs"
+    purpose: "Application and system logs"
+    data_classification: "Internal"
+    size_mb: 150
+    security_configuration:
+      encryption: true
+      encryption_type: "AES256"
+      versioning: true
+      public_access_block: true
+      logging_enabled: true
+      lifecycle_policy: true
+      lifecycle_days: 90
+    security_issues: []  # This bucket is properly configured
+    sample_files:
+      - "app-logs/2024-12-01.log"
+      - "app-logs/2024-12-02.log"
+      - "system-logs/cloudtrail-events.json"
+
+  - name: "cloudretail-public-assets"
+    purpose: "Product images and marketing materials"
+    data_classification: "Public"
+    size_mb: 500
+    security_configuration:
+      encryption: true
+      encryption_type: "AES256"
+      versioning: false
+      public_access_block: false  # INTENTIONAL - needs to be public
+      logging_enabled: false  # INTENTIONAL ISSUE
+      lifecycle_policy: false
+    security_issues:
+      - type: "public_bucket_no_logging"
+        severity: "medium"
+        control_domain: "Logging"
+        description: "Public bucket without access logging for security monitoring"
+      - type: "overly_permissive_policy"
+        severity: "medium"
+        control_domain: "Network"
+        description: "Bucket policy allows public read without IP restrictions"
+    sample_files:
+      - "products/electronics/laptop-001.jpg"
+      - "products/home/furniture-042.jpg"
+      - "marketing/banner-holiday-2024.png"
+
+# EC2 Instances with security group issues
+ec2_instances:
+  - name: "cloudretail-web-server"
+    instance_type: "t2.micro"
+    purpose: "Web application server"
+    ami: "ami-0c55b159cbfafe1f0"  # Amazon Linux 2
+    region: "us-east-1"
+    security_group:
+      name: "web-server-sg"
+      inbound_rules:
+        - protocol: "tcp"
+          port: 22
+          source: "0.0.0.0/0"  # INTENTIONAL ISSUE
+          description: "SSH access from anywhere"
+        - protocol: "tcp"
+          port: 80
+          source: "0.0.0.0/0"
+          description: "HTTP access"
+        - protocol: "tcp"
+          port: 443
+          source: "0.0.0.0/0"
+          description: "HTTPS access"
+      outbound_rules:
+        - protocol: "-1"
+          port: "all"
+          destination: "0.0.0.0/0"
+          description: "Allow all outbound"
+    security_issues:
+      - type: "unrestricted_ssh"
+        severity: "critical"
+        control_domain: "Network"
+        description: "SSH port 22 open to the internet (0.0.0.0/0)"
+      - type: "no_encryption_in_transit"
+        severity: "medium"
+        control_domain: "Data Encryption"
+        description: "HTTP port 80 enabled without redirect to HTTPS"
+    monitoring:
+      cloudwatch_enabled: false  # INTENTIONAL ISSUE
+      detailed_monitoring: false
+    tags:
+      Environment: "Production"
+      Application: "WebServer"
+
+  - name: "cloudretail-database-server"
+    instance_type: "t2.micro"
+    purpose: "Database server (simulated)"
+    ami: "ami-0c55b159cbfafe1f0"  # Amazon Linux 2
+    region: "us-east-1"
+    security_group:
+      name: "database-sg"
+      inbound_rules:
+        - protocol: "tcp"
+          port: 3306
+          source: "10.0.1.0/24"
+          description: "MySQL from web tier"
+        - protocol: "tcp"
+          port: 22
+          source: "10.0.1.0/24"
+          description: "SSH from web tier"
+      outbound_rules:
+        - protocol: "-1"
+          port: "all"
+          destination: "0.0.0.0/0"
+          description: "Allow all outbound"
+    security_issues:
+      - type: "no_backup_configured"
+        severity: "high"
+        control_domain: "Disaster Recovery"
+        description: "No automated backup or snapshot policy configured"
+      - type: "no_monitoring_alarms"
+        severity: "medium"
+        control_domain: "Logging"
+        description: "No CloudWatch alarms for CPU, disk, or availability"
+    monitoring:
+      cloudwatch_enabled: true
+      detailed_monitoring: false
+    tags:
+      Environment: "Production"
+      Application: "Database"
+
+# VPC Configuration
+vpc_configuration:
+  cidr_block: "10.0.0.0/16"
+  name: "cloudretail-vpc"
+  subnets:
+    - name: "public-subnet-1"
+      cidr: "10.0.1.0/24"
+      availability_zone: "us-east-1a"
+      public: true
+    - name: "private-subnet-1"
+      cidr: "10.0.2.0/24"
+      availability_zone: "us-east-1a"
+      public: false
+  internet_gateway: true
+  nat_gateway: false  # INTENTIONAL ISSUE - cost saving but security concern
+  security_issues:
+    - type: "no_nat_gateway"
+      severity: "low"
+      control_domain: "Network"
+      description: "Private subnet without NAT gateway may expose instances"
+
+# CloudTrail Configuration
+cloudtrail:
+  enabled: true
+  name: "cloudretail-audit-trail"
+  s3_bucket: "cloudretail-application-logs"
+  s3_key_prefix: "cloudtrail/"
+  include_global_events: true
+  is_multi_region: false  # INTENTIONAL ISSUE
+  log_file_validation: false  # INTENTIONAL ISSUE
+  security_issues:
+    - type: "single_region_logging"
+      severity: "medium"
+      control_domain: "Logging"
+      description: "CloudTrail only enabled in one region, missing multi-region events"
+    - type: "no_log_validation"
+      severity: "medium"
+      control_domain: "Logging"
+      description: "Log file validation not enabled, logs could be tampered"
+
+# CloudWatch Configuration
+cloudwatch:
+  log_groups:
+    - name: "/aws/cloudtrail/cloudretail"
+      retention_days: 30  # INTENTIONAL ISSUE - should be longer
+  alarms:
+    - name: "UnauthorizedAPICalls"
+      metric: "UnauthorizedAPICallsCount"
+      threshold: 5
+      enabled: false  # INTENTIONAL ISSUE
+  security_issues:
+    - type: "short_log_retention"
+      severity: "medium"
+      control_domain: "Logging"
+      description: "CloudWatch logs retained for only 30 days, insufficient for compliance"
+    - type: "security_alarms_disabled"
+      severity: "high"
+      control_domain: "Incident Response"
+      description: "Security monitoring alarms exist but are not enabled"
+
+# Information Assets - Critical data and systems requiring protection
+information_assets:
+  - asset_id: "ASSET-001"
+    asset_name: "Customer Database"
+    asset_type: "S3 Bucket"
+    location: "cloudretail-customer-data"
+    data_classification: "PII"
+    confidentiality_impact: "high"  # Customer data breach = regulatory fines, reputation damage
+    integrity_impact: "high"  # Modified customer data = fraud, incorrect orders
+    availability_impact: "high"  # System down = no orders, revenue loss
+    business_process: "Customer Account Management & Order Processing"
+    description: "Contains customer profiles, order history, and payment transaction logs. Critical for business operations and subject to PCI-DSS and GDPR compliance."
+
+  - asset_id: "ASSET-002"
+    asset_name: "Payment Processing System"
+    asset_type: "Application"
+    location: "cloudretail-web-server"
+    data_classification: "Financial"
+    confidentiality_impact: "high"  # Payment data breach = PCI-DSS violation, fines
+    integrity_impact: "high"  # Modified transactions = financial loss, fraud
+    availability_impact: "high"  # System down = cannot process payments, revenue loss
+    business_process: "Payment Processing"
+    description: "Web application handling payment transactions. Downtime directly impacts revenue. Must maintain PCI-DSS compliance."
+
+  - asset_id: "ASSET-003"
+    asset_name: "Administrator Accounts"
+    asset_type: "IAM User"
+    location: "admin-john"
+    data_classification: "Confidential"
+    confidentiality_impact: "high"  # Compromised admin = full AWS account access
+    integrity_impact: "high"  # Malicious admin actions = data deletion, system changes
+    availability_impact: "high"  # Admin lockout = cannot manage infrastructure
+    business_process: "IT Operations & Infrastructure Management"
+    description: "Administrative access to entire AWS environment. Compromise could lead to complete system takeover."
+
+  - asset_id: "ASSET-004"
+    asset_name: "Application Logs"
+    asset_type: "S3 Bucket"
+    location: "cloudretail-application-logs"
+    data_classification: "Confidential"
+    confidentiality_impact: "medium"  # Logs may contain sensitive data patterns
+    integrity_impact: "high"  # Modified logs = cannot investigate incidents
+    availability_impact: "medium"  # Log loss = compliance issues, cannot troubleshoot
+    business_process: "Security Monitoring & Incident Response"
+    description: "Contains CloudTrail events and application logs. Critical for security investigations and compliance audits."
+
+  - asset_id: "ASSET-005"
+    asset_name: "Database Server"
+    asset_type: "EC2 Instance"
+    location: "cloudretail-database-server"
+    data_classification: "Confidential"
+    confidentiality_impact: "high"  # Database contains all business data
+    integrity_impact: "high"  # Corrupted database = business disruption
+    availability_impact: "high"  # Database down = entire application unavailable
+    business_process: "Data Storage & Retrieval"
+    description: "Primary database server storing customer, product, and order data. Single point of failure for application."
+
+# Summary of Intentional Issues by ISACA Control Domain
+security_issues_summary:
+  governance:
+    count: 1
+    issues:
+      - "Root account usage for daily operations"
+  
+  logical_access:
+    count: 7
+    issues:
+      - "Administrator account without MFA"
+      - "Overly permissive developer policy"
+      - "Inactive user account not disabled"
+      - "Contractor account with no expiration"
+      - "Old access key not rotated"
+      - "Service account with embedded credentials"
+  
+  data_encryption:
+    count: 2
+    issues:
+      - "Unencrypted S3 bucket with customer PII"
+      - "HTTP enabled without HTTPS redirect"
+  
+  network:
+    count: 3
+    issues:
+      - "SSH port open to internet"
+      - "Public bucket without IP restrictions"
+      - "No NAT gateway for private subnet"
+  
+  logging:
+    count: 6
+    issues:
+      - "No S3 access logging on sensitive bucket"
+      - "No S3 access logging on public bucket"
+      - "CloudTrail single-region only"
+      - "CloudTrail log validation disabled"
+      - "Short CloudWatch log retention"
+      - "No monitoring alarms on database"
+  
+  incident_response:
+    count: 1
+    issues:
+      - "Security alarms disabled"
+  
+  disaster_recovery:
+    count: 2
+    issues:
+      - "No versioning on customer data bucket"
+      - "No backup configured for database"
+  
+  asset_management:
+    count: 0
+    issues: []
+
+# Metadata
+metadata:
+  template_version: "1.0"
+  created_date: "2024-12-03"
+  last_updated: "2024-12-03"
+  author: "AWS Audit Agent System"
+  purpose: "Demonstration template for agent-based AWS audit"
+  total_intentional_issues: 22
+  estimated_monthly_cost: "$0.00"  # Within AWS Free Tier
+  estimated_setup_time: "15 minutes"

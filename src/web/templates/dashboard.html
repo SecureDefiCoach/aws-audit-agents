@@ -1,0 +1,1150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agent Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .stat-card h3 {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-card .value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .agents-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .agent-card {
+            background: white;
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+        }
+
+        .agent-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        
+        .company-rep-card {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+        }
+        
+        .company-rep-card:hover {
+            background: #f1f3f5;
+        }
+
+        .agent-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1rem;
+        }
+
+        .agent-name {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .agent-status {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .status-idle {
+            background: #e0e0e0;
+            color: #666;
+        }
+
+        .status-working {
+            background: #4caf50;
+            color: white;
+        }
+
+        .status-complete {
+            background: #2196f3;
+            color: white;
+        }
+
+        .status-blocked {
+            background: #f44336;
+            color: white;
+        }
+
+        .agent-role {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .agent-model {
+            display: inline-block;
+            background: #f0f0f0;
+            padding: 0.25rem 0.75rem;
+            border-radius: 5px;
+            font-size: 0.85rem;
+            color: #667eea;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .agent-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #eee;
+        }
+
+        .agent-stat {
+            text-align: center;
+        }
+
+        .agent-stat-value {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .agent-stat-label {
+            font-size: 0.75rem;
+            color: #999;
+            text-transform: uppercase;
+            margin-top: 0.25rem;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .modal-content {
+            background: white;
+            max-width: 900px;
+            margin: 2rem auto;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+
+        .modal-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            font-size: 1.5rem;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #999;
+        }
+
+        .close-btn:hover {
+            color: #333;
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        .tabs {
+            display: flex;
+            border-bottom: 2px solid #eee;
+            margin-bottom: 1.5rem;
+        }
+
+        .tab {
+            padding: 0.75rem 1.5rem;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            margin-bottom: -2px;
+            transition: all 0.2s;
+        }
+
+        .tab:hover {
+            background: #f5f5f5;
+        }
+
+        .tab.active {
+            border-bottom-color: #667eea;
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        .info-item {
+            padding: 0.75rem;
+            background: #f9f9f9;
+            border-radius: 5px;
+        }
+
+        .info-label {
+            font-size: 0.8rem;
+            color: #999;
+            text-transform: uppercase;
+            margin-bottom: 0.25rem;
+        }
+
+        .info-value {
+            font-size: 1rem;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .action-item, .memory-item {
+            padding: 1rem;
+            background: #f9f9f9;
+            border-radius: 5px;
+            margin-bottom: 0.75rem;
+        }
+
+        .action-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+
+        .action-type {
+            font-weight: 600;
+            color: #667eea;
+        }
+
+        .action-time {
+            font-size: 0.85rem;
+            color: #999;
+        }
+
+        .action-description {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .memory-role {
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+
+        .memory-content {
+            color: #666;
+            font-size: 0.9rem;
+            white-space: pre-wrap;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .refresh-btn {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 1rem 1.5rem;
+            border-radius: 50px;
+            font-size: 1rem;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
+            transition: all 0.2s;
+        }
+
+        .refresh-btn:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(102, 126, 234, 0.5);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: #999;
+        }
+
+        /* Phase Tracker Styles */
+        .phase-tracker {
+            background: white;
+            border-radius: 10px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .phase-tracker h2 {
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            color: #333;
+        }
+
+        .phases-container {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 1rem;
+        }
+
+        .phase-box {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .phase-box.not-started {
+            background: white;
+            border-color: #e0e0e0;
+        }
+
+        .phase-box.in-progress {
+            background: #e3f2fd;
+            border-color: #2196f3;
+            box-shadow: 0 0 10px rgba(33, 150, 243, 0.3);
+        }
+
+        .phase-box.complete {
+            background: #e8f5e9;
+            border-color: #4caf50;
+        }
+
+        .phase-number {
+            display: inline-block;
+            width: 32px;
+            height: 32px;
+            line-height: 32px;
+            border-radius: 50%;
+            background: #e0e0e0;
+            color: #666;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .phase-box.in-progress .phase-number {
+            background: #2196f3;
+            color: white;
+            animation: pulse 2s infinite;
+        }
+
+        .phase-box.complete .phase-number {
+            background: #4caf50;
+            color: white;
+        }
+
+        .phase-box.complete .phase-number::after {
+            content: '✓';
+            display: block;
+            font-size: 1.2rem;
+            line-height: 32px;
+        }
+
+        .phase-box.complete .phase-number span {
+            display: none;
+        }
+
+        .phase-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 0.25rem;
+        }
+
+        .phase-subtitle {
+            font-size: 0.75rem;
+            color: #999;
+        }
+
+        .phase-box.in-progress .phase-subtitle {
+            color: #2196f3;
+            font-weight: 600;
+        }
+
+        .phase-box.complete .phase-subtitle {
+            color: #4caf50;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 0 0 0 rgba(33, 150, 243, 0.7);
+            }
+            50% {
+                transform: scale(1.05);
+                box-shadow: 0 0 0 10px rgba(33, 150, 243, 0);
+            }
+        }
+
+        /* Responsive design for phase tracker */
+        @media (max-width: 1200px) {
+            .phases-container {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .phases-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .phases-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🤖 Agent Dashboard</h1>
+        <p>Monitor and manage your audit agents in real-time</p>
+    </div>
+
+    <div class="container">
+        <!-- Audit Execution Phase Tracker -->
+        <div class="phase-tracker">
+            <h2>📋 Audit Execution Status</h2>
+            <div class="phases-container">
+                <div class="phase-box not-started" id="phase-1">
+                    <div class="phase-number"><span>1</span></div>
+                    <div class="phase-title">Risk Assessment</div>
+                    <div class="phase-subtitle">Not Started</div>
+                </div>
+                <div class="phase-box not-started" id="phase-2">
+                    <div class="phase-number"><span>2</span></div>
+                    <div class="phase-title">Audit Program</div>
+                    <div class="phase-subtitle">Not Started</div>
+                </div>
+                <div class="phase-box not-started" id="phase-3">
+                    <div class="phase-number"><span>3</span></div>
+                    <div class="phase-title">Workpaper Review</div>
+                    <div class="phase-subtitle">Not Started</div>
+                </div>
+                <div class="phase-box not-started" id="phase-4">
+                    <div class="phase-number"><span>4</span></div>
+                    <div class="phase-title">Remediation</div>
+                    <div class="phase-subtitle">Not Started</div>
+                </div>
+                <div class="phase-box not-started" id="phase-5">
+                    <div class="phase-number"><span>5</span></div>
+                    <div class="phase-title">Audit Reporting</div>
+                    <div class="phase-subtitle">Not Started</div>
+                </div>
+                <div class="phase-box not-started" id="phase-6">
+                    <div class="phase-number"><span>6</span></div>
+                    <div class="phase-title">Follow-Up</div>
+                    <div class="phase-subtitle">Not Started</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="stats-grid" id="stats-grid">
+            <div class="stat-card">
+                <h3>Total Agents</h3>
+                <div class="value" id="total-agents">-</div>
+            </div>
+            <div class="stat-card">
+                <h3>Active Agents</h3>
+                <div class="value" id="active-agents">-</div>
+            </div>
+            <div class="stat-card">
+                <h3>Total Actions</h3>
+                <div class="value" id="total-actions">-</div>
+            </div>
+            <div class="stat-card">
+                <h3>Total Cost</h3>
+                <div class="value" id="total-cost">$0.00</div>
+            </div>
+        </div>
+
+        <div class="agents-grid" id="agents-grid">
+            <div class="loading">Loading agents...</div>
+        </div>
+    </div>
+
+    <!-- Agent Detail Modal -->
+    <div class="modal" id="agent-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modal-agent-name">Agent Details</h2>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="tabs">
+                    <div class="tab active" onclick="switchTab('info')">Info</div>
+                    <div class="tab" onclick="switchTab('capabilities')">Capabilities</div>
+                    <div class="tab" onclick="switchTab('knowledge')">Knowledge</div>
+                    <div class="tab" onclick="switchTab('tasks')">Tasks</div>
+                    <div class="tab" onclick="switchTab('actions')">Actions</div>
+                    <div class="tab" onclick="switchTab('memory')">Memory</div>
+                </div>
+                
+                <div class="tab-content active" id="info-tab">
+                    <div class="info-grid" id="agent-info"></div>
+                </div>
+                
+                <div class="tab-content" id="capabilities-tab">
+                    <div id="agent-capabilities"></div>
+                </div>
+                
+                <div class="tab-content" id="knowledge-tab">
+                    <div id="agent-knowledge"></div>
+                </div>
+                
+                <div class="tab-content" id="tasks-tab">
+                    <div id="agent-tasks"></div>
+                </div>
+                
+                <div class="tab-content" id="actions-tab">
+                    <div id="agent-actions"></div>
+                </div>
+                
+                <div class="tab-content" id="memory-tab">
+                    <div id="agent-memory"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button class="refresh-btn" onclick="loadAgents()">🔄 Refresh</button>
+
+    <script>
+        let currentAgent = null;
+
+        async function loadAgents() {
+            try {
+                const response = await fetch('/api/agents');
+                const agents = await response.json();
+                
+                displayStats(agents);
+                displayAgents(agents);
+            } catch (error) {
+                console.error('Error loading agents:', error);
+            }
+        }
+
+        function displayStats(agents) {
+            document.getElementById('total-agents').textContent = agents.length;
+            document.getElementById('active-agents').textContent = 
+                agents.filter(a => a.status === 'working').length;
+            document.getElementById('total-actions').textContent = 
+                agents.reduce((sum, a) => sum + a.actions, 0);
+            document.getElementById('total-cost').textContent = 
+                '$' + agents.reduce((sum, a) => sum + a.cost, 0).toFixed(4);
+        }
+
+        function displayAgents(agents) {
+            const grid = document.getElementById('agents-grid');
+            
+            if (agents.length === 0) {
+                grid.innerHTML = '<div class="loading">No agents found</div>';
+                return;
+            }
+            
+            // Sort agents: Chuck first, then others
+            const sortedAgents = [...agents].sort((a, b) => {
+                if (a.key === 'chuck') return -1;
+                if (b.key === 'chuck') return 1;
+                return 0;
+            });
+            
+            grid.innerHTML = sortedAgents.map(agent => {
+                const isChuck = agent.key === 'chuck';
+                const cardClass = isChuck ? 'agent-card company-rep-card' : 'agent-card';
+                return `
+                <div class="${cardClass}" onclick="showAgentDetails('${agent.key}')">
+                    <div class="agent-header">
+                        <div class="agent-name">${agent.name}</div>
+                        <div class="agent-status status-${agent.status}">${agent.status}</div>
+                    </div>
+                    <div class="agent-role">${agent.role}</div>
+                    <div class="agent-model">${agent.model}</div>
+                    <div class="agent-stats">
+                        <div class="agent-stat">
+                            <div class="agent-stat-value">${agent.actions}</div>
+                            <div class="agent-stat-label">Actions</div>
+                        </div>
+                        <div class="agent-stat">
+                            <div class="agent-stat-value">${agent.llm_calls}</div>
+                            <div class="agent-stat-label">LLM Calls</div>
+                        </div>
+                        <div class="agent-stat">
+                            <div class="agent-stat-value">$${agent.cost.toFixed(4)}</div>
+                            <div class="agent-stat-label">Cost</div>
+                        </div>
+                    </div>
+                </div>
+                `;
+            }).join('');
+        }
+
+        async function showAgentDetails(agentKey) {
+            currentAgent = agentKey;
+            
+            // Clear all tab content to prevent showing stale data
+            document.getElementById('agent-info').innerHTML = '<div class="loading">Loading...</div>';
+            document.getElementById('agent-actions').innerHTML = '<div class="loading">Loading...</div>';
+            document.getElementById('agent-memory').innerHTML = '<div class="loading">Loading...</div>';
+            
+            document.getElementById('agent-modal').style.display = 'block';
+            
+            // Load info tab by default (this will also set the modal title)
+            await loadAgentInfo(agentKey);
+        }
+
+        async function loadAgentInfo(agentName) {
+            try {
+                const response = await fetch(`/api/agents/${agentName.toLowerCase()}`);
+                const info = await response.json();
+                
+                // Set modal title with display name
+                document.getElementById('modal-agent-name').textContent = info.name;
+                
+                const infoDiv = document.getElementById('agent-info');
+                infoDiv.innerHTML = `
+                    <div class="info-item">
+                        <div class="info-label">Name</div>
+                        <div class="info-value">${info.name}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Role</div>
+                        <div class="info-value">${info.role}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Model</div>
+                        <div class="info-value">${info.model}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Provider</div>
+                        <div class="info-value">${info.provider}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Status</div>
+                        <div class="info-value">${info.goal_status}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Current Goal</div>
+                        <div class="info-value">${info.current_goal || 'None'}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Tools</div>
+                        <div class="info-value">${info.tools ? info.tools.join(', ') : 'None'}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Memory Size</div>
+                        <div class="info-value">${info.memory_size} messages</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Actions</div>
+                        <div class="info-value">${info.action_count}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">LLM Calls</div>
+                        <div class="info-value">${info.llm_calls}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Tokens Used</div>
+                        <div class="info-value">${info.llm_tokens.toLocaleString()}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Cost</div>
+                        <div class="info-value">$${info.llm_cost.toFixed(4)}</div>
+                    </div>
+                `;
+            } catch (error) {
+                console.error('Error loading agent info:', error);
+            }
+        }
+
+        async function loadAgentActions(agentName) {
+            try {
+                const response = await fetch(`/api/agents/${agentName.toLowerCase()}/actions?last_n=20`);
+                const actions = await response.json();
+                
+                const actionsDiv = document.getElementById('agent-actions');
+                
+                if (actions.length === 0) {
+                    actionsDiv.innerHTML = '<div class="loading">No actions yet</div>';
+                    return;
+                }
+                
+                actionsDiv.innerHTML = actions.map(action => `
+                    <div class="action-item">
+                        <div class="action-header">
+                            <div class="action-type">${action.action_type}</div>
+                            <div class="action-time">${new Date(action.timestamp).toLocaleString()}</div>
+                        </div>
+                        <div class="action-description">${action.description}</div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('Error loading actions:', error);
+            }
+        }
+
+        async function loadAgentMemory(agentName) {
+            try {
+                // Load system prompt
+                const promptResponse = await fetch(`/api/agents/${agentName.toLowerCase()}/system_prompt`);
+                const promptData = await promptResponse.json();
+                
+                // Load memory
+                const memoryResponse = await fetch(`/api/agents/${agentName.toLowerCase()}/memory?last_n=5`);
+                const memory = await memoryResponse.json();
+                
+                const memoryDiv = document.getElementById('agent-memory');
+                
+                let html = '<h3 style="margin-bottom: 1rem;">System Prompt <button onclick="toggleEditPrompt()" style="margin-left: 1rem; padding: 0.5rem 1rem; background: #667eea; color: white; border: none; border-radius: 5px; cursor: pointer;">Edit</button></h3>';
+                
+                html += `
+                    <div id="prompt-view" class="memory-item" style="margin-bottom: 2rem;">
+                        <div class="memory-content" style="max-height: 300px;">${promptData.prompt || 'No system prompt'}</div>
+                    </div>
+                    <div id="prompt-edit" style="display: none; margin-bottom: 2rem;">
+                        <textarea id="prompt-textarea" style="width: 100%; min-height: 300px; padding: 1rem; font-family: monospace; font-size: 0.9rem; border: 1px solid #ddd; border-radius: 5px;">${promptData.prompt || ''}</textarea>
+                        <div style="margin-top: 1rem;">
+                            <button onclick="saveSystemPrompt()" style="padding: 0.5rem 1.5rem; background: #4caf50; color: white; border: none; border-radius: 5px; cursor: pointer; margin-right: 0.5rem;">Save</button>
+                            <button onclick="cancelEditPrompt()" style="padding: 0.5rem 1.5rem; background: #999; color: white; border: none; border-radius: 5px; cursor: pointer;">Cancel</button>
+                        </div>
+                    </div>
+                `;
+                
+                html += '<h3 style="margin: 2rem 0 1rem 0;">Recent Memory</h3>';
+                
+                if (memory.length === 0) {
+                    html += '<div class="loading">No memory yet</div>';
+                } else {
+                    memory.forEach(msg => {
+                        html += `
+                            <div class="memory-item">
+                                <div class="memory-role">${msg.role.toUpperCase()}</div>
+                                <div class="memory-content">${msg.content.substring(0, 500)}${msg.content.length > 500 ? '...' : ''}</div>
+                            </div>
+                        `;
+                    });
+                }
+                
+                memoryDiv.innerHTML = html;
+            } catch (error) {
+                console.error('Error loading memory:', error);
+            }
+        }
+        
+        function toggleEditPrompt() {
+            document.getElementById('prompt-view').style.display = 'none';
+            document.getElementById('prompt-edit').style.display = 'block';
+        }
+        
+        function cancelEditPrompt() {
+            document.getElementById('prompt-view').style.display = 'block';
+            document.getElementById('prompt-edit').style.display = 'none';
+        }
+        
+        async function saveSystemPrompt() {
+            const newPrompt = document.getElementById('prompt-textarea').value;
+            
+            if (!newPrompt.trim()) {
+                alert('System prompt cannot be empty');
+                return;
+            }
+            
+            try {
+                const response = await fetch(`/api/agents/${currentAgent.toLowerCase()}/system_prompt`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ prompt: newPrompt })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    alert('System prompt updated successfully!');
+                    // Reload memory tab to show updated prompt
+                    loadAgentMemory(currentAgent);
+                } else {
+                    alert('Error: ' + (result.error || 'Unknown error'));
+                }
+            } catch (error) {
+                console.error('Error saving system prompt:', error);
+                alert('Failed to save system prompt');
+            }
+        }
+
+        async function loadAgentCapabilities(agentName) {
+            try {
+                const response = await fetch(`/api/agents/${agentName.toLowerCase()}/capabilities`);
+                const data = await response.json();
+                
+                const capDiv = document.getElementById('agent-capabilities');
+                
+                let html = '<h3 style="margin-bottom: 1rem;">Tools</h3>';
+                
+                if (data.tools.length === 0) {
+                    html += '<div class="loading">No tools available</div>';
+                } else {
+                    data.tools.forEach(tool => {
+                        html += `
+                            <div class="action-item" style="margin-bottom: 1rem;">
+                                <div class="action-header">
+                                    <div class="action-type">${tool.name}</div>
+                                </div>
+                                <div class="action-description" style="margin-bottom: 0.5rem;">${tool.description}</div>
+                                <div style="font-size: 0.85rem; color: #999;">
+                                    Parameters: ${tool.parameters.length > 0 ? tool.parameters.map(p => p.name).join(', ') : 'None'}
+                                </div>
+                            </div>
+                        `;
+                    });
+                }
+                
+                if (data.aws_capabilities.length > 0) {
+                    html += '<h3 style="margin: 2rem 0 1rem 0;">AWS Capabilities</h3>';
+                    data.aws_capabilities.forEach(aws => {
+                        html += `
+                            <div class="action-item" style="margin-bottom: 1rem;">
+                                <div class="action-header">
+                                    <div class="action-type">${aws.service}</div>
+                                </div>
+                                <div class="action-description" style="margin-bottom: 0.5rem;">${aws.description}</div>
+                                <div style="font-size: 0.85rem; color: #999;">
+                                    Operations: ${aws.operations.join(', ')}
+                                </div>
+                            </div>
+                        `;
+                    });
+                }
+                
+                html += `
+                    <h3 style="margin: 2rem 0 1rem 0;">Summary</h3>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <div class="info-label">Total Tools</div>
+                            <div class="info-value">${data.tools.length}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Knowledge Procedures</div>
+                            <div class="info-value">${data.knowledge_count}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">AWS Services</div>
+                            <div class="info-value">${data.aws_capabilities.length}</div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-label">Can Delegate Tasks</div>
+                            <div class="info-value">${data.can_delegate_tasks ? 'Yes' : 'No'}</div>
+                        </div>
+                    </div>
+                `;
+                
+                capDiv.innerHTML = html;
+            } catch (error) {
+                console.error('Error loading capabilities:', error);
+            }
+        }
+
+        async function loadAgentKnowledge(agentName) {
+            try {
+                const response = await fetch(`/api/agents/${agentName.toLowerCase()}/knowledge`);
+                const data = await response.json();
+                
+                const knowledgeDiv = document.getElementById('agent-knowledge');
+                
+                if (data.count === 0) {
+                    knowledgeDiv.innerHTML = '<div class="loading">No knowledge loaded</div>';
+                    return;
+                }
+                
+                let html = `<h3 style="margin-bottom: 1rem;">Loaded Procedures (${data.count})</h3>`;
+                
+                data.procedures.forEach(proc => {
+                    html += `
+                        <div class="action-item" style="margin-bottom: 1rem;">
+                            <div class="action-header">
+                                <div class="action-type">${proc.title}</div>
+                                <div class="action-time">${proc.lines} lines</div>
+                            </div>
+                            <div class="memory-content" style="max-height: 150px; margin-top: 0.5rem;">${proc.preview}</div>
+                        </div>
+                    `;
+                });
+                
+                knowledgeDiv.innerHTML = html;
+            } catch (error) {
+                console.error('Error loading knowledge:', error);
+            }
+        }
+
+        async function loadAgentTasks(agentName) {
+            try {
+                const response = await fetch(`/api/agents/${agentName.toLowerCase()}/tasks`);
+                const data = await response.json();
+                
+                const tasksDiv = document.getElementById('agent-tasks');
+                
+                let html = '';
+                
+                // Current Tasks
+                html += '<h3 style="margin-bottom: 1rem;">Current Tasks (' + data.current.length + ')</h3>';
+                if (data.current.length === 0) {
+                    html += '<div class="loading">No current tasks</div>';
+                } else {
+                    data.current.forEach(task => {
+                        html += `
+                            <div class="action-item" style="margin-bottom: 1rem;">
+                                <div class="action-header">
+                                    <div class="action-type">☐ ${task.description}</div>
+                                    <div class="action-time">${task.priority || 'medium'}</div>
+                                </div>
+                                <div style="font-size: 0.85rem; color: #999; margin-top: 0.5rem;">
+                                    ${task.assigned_by ? 'Assigned by: ' + task.assigned_by : ''}
+                                    ${task.assigned_on ? ' on ' + task.assigned_on : ''}
+                                    ${task.due ? ' • Due: ' + task.due : ''}
+                                </div>
+                            </div>
+                        `;
+                    });
+                }
+                
+                // Completed Tasks
+                html += '<h3 style="margin: 2rem 0 1rem 0;">Completed Tasks (' + data.completed.length + ')</h3>';
+                if (data.completed.length === 0) {
+                    html += '<div class="loading">No completed tasks</div>';
+                } else {
+                    data.completed.forEach(task => {
+                        html += `
+                            <div class="action-item" style="margin-bottom: 1rem; opacity: 0.7;">
+                                <div class="action-header">
+                                    <div class="action-type">☑ ${task.description}</div>
+                                    <div class="action-time">${task.completed_on || ''}</div>
+                                </div>
+                            </div>
+                        `;
+                    });
+                }
+                
+                // Delegated Tasks
+                html += '<h3 style="margin: 2rem 0 1rem 0;">Delegated Tasks (' + data.delegated.length + ')</h3>';
+                if (data.delegated.length === 0) {
+                    html += '<div class="loading">No delegated tasks</div>';
+                } else {
+                    data.delegated.forEach(task => {
+                        html += `
+                            <div class="action-item" style="margin-bottom: 1rem;">
+                                <div class="action-header">
+                                    <div class="action-type">→ ${task.description}</div>
+                                    <div class="action-time">${task.status || 'pending'}</div>
+                                </div>
+                                <div style="font-size: 0.85rem; color: #999; margin-top: 0.5rem;">
+                                    ${task.assigned_to ? 'Assigned to: ' + task.assigned_to : ''}
+                                    ${task.assigned_on ? ' on ' + task.assigned_on : ''}
+                                </div>
+                            </div>
+                        `;
+                    });
+                }
+                
+                tasksDiv.innerHTML = html;
+            } catch (error) {
+                console.error('Error loading tasks:', error);
+            }
+        }
+
+        function switchTab(tabName) {
+            // Update tab buttons
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Update tab content
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            document.getElementById(`${tabName}-tab`).classList.add('active');
+            
+            // Load data for the tab
+            if (tabName === 'capabilities') {
+                loadAgentCapabilities(currentAgent);
+            } else if (tabName === 'knowledge') {
+                loadAgentKnowledge(currentAgent);
+            } else if (tabName === 'tasks') {
+                loadAgentTasks(currentAgent);
+            } else if (tabName === 'actions') {
+                loadAgentActions(currentAgent);
+            } else if (tabName === 'memory') {
+                loadAgentMemory(currentAgent);
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('agent-modal').style.display = 'none';
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('agent-modal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+
+        // Phase status management
+        function updatePhaseStatus(phaseNumber, status) {
+            const phaseBox = document.getElementById(`phase-${phaseNumber}`);
+            if (!phaseBox) return;
+            
+            // Remove all status classes
+            phaseBox.classList.remove('not-started', 'in-progress', 'complete');
+            
+            // Add new status class
+            phaseBox.classList.add(status);
+            
+            // Update subtitle text
+            const subtitle = phaseBox.querySelector('.phase-subtitle');
+            if (status === 'not-started') {
+                subtitle.textContent = 'Not Started';
+            } else if (status === 'in-progress') {
+                subtitle.textContent = 'In Progress';
+            } else if (status === 'complete') {
+                subtitle.textContent = 'Complete';
+            }
+        }
+
+        // Load phase status from backend
+        async function loadPhaseStatus() {
+            try {
+                const response = await fetch('/api/audit/phases');
+                const phases = await response.json();
+                
+                phases.forEach(phase => {
+                    updatePhaseStatus(phase.number, phase.status);
+                });
+            } catch (error) {
+                console.error('Error loading phase status:', error);
+                // If endpoint doesn't exist yet, phases will remain in default state
+            }
+        }
+
+        // Example: Manually update phase status (for testing)
+        function setPhase(phaseNumber, status) {
+            updatePhaseStatus(phaseNumber, status);
+            
+            // Optionally save to backend
+            fetch('/api/audit/phases', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    phase: phaseNumber,
+                    status: status
+                })
+            }).catch(error => {
+                console.error('Error saving phase status:', error);
+            });
+        }
+
+        // Load agents on page load
+        loadAgents();
+        loadPhaseStatus();
+
+        // Auto-refresh every 5 seconds
+        setInterval(() => {
+            loadAgents();
+            loadPhaseStatus();
+        }, 5000);
+    </script>
+</body>
+</html>

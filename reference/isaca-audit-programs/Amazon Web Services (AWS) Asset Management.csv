@@ -1,0 +1,74 @@
+﻿"Amazon Web Services® (AWS®) Audit Program
+Asset Configuration and Management",,,,,,,,,,,,,
+"Process
+Sub-area",Ref. Risk,Control Objectives,Controls,Control Type,Control Classification,Control Frequency,Testing Step,Ref. Framework/ Standards,Ref. Workpaper,"Pass/
+Fail",Comments,,
+"Utilizing Baselined
+AWS Resources",,Assurance that operational requirements for security or other purposes are met is gained through a formal process for deployment of AWS applications in the environment. ,"The enterprise utilizes AWS CloudFormation templates to develop and deploy AWS applications in the environment. The enterprise routinely assesses adequacy of CloudFormation templates to ensure that they meet business requirements for security and/or functionality.
+
+Note: The enterprise can leverage CloudFormation templates to baseline AWS application resources (e.g., S3 buckets, EC2 instances, etc.) and configurations that meet certain requirements (e.g., that S3 bucket logging is enabled by default, or client-side encryption is enabled). These templates can be further leveraged to continuously delete and regenerate the entire AWS environment on an enterprise-defined frequency, which is a good security practice, and ensures that minimum baselines are constantly achieved.",,,,"1. Interview responsible and/or accountable individuals to determine how the enterprise develops and deploys individual applications and related resources (assets) within the environment. Expressly consider how the enterprise sets, monitors and ensures minimum security requirements for assets.
+2. Inquire about the specific configurations or security requirements each in scope AWS application should meet as set forth by the enterprise and document these requirements per AWS application asset.
+3. Obtain documentation of the population of AWS application assets that utilize CloudFront templates for asset generation and security configuration.
+4. Using a judgmental selection, obtain and inspect samples of AWS applications to determine whether the CloudFront template adequately sets the required configurations or security requirements.
+5. Using a judgmental selection, obtain and inspect evidence of reviews demonstrating that the enterprise assesses adequacy of asset configurations or security configuration provided by individual CloudFront templates. ",,,,,,
+Change Management,,The enterprise expressly authorizes changes to AWS applications and related resources to ensure that any modifications are appropriate and support business needs.," AWS asset configuration modifications are formally documented, reviewed, tested and approved, prior to production deployment.",,,,"1. Interview responsible and/or accountable individuals to determine whether processes and procedures are in place that control modifications to AWS application and related resources (assets). Review the population of applications and related resources the processes and procedures apply to. Review which individuals are responsible for each part of the change-management process.
+2. Document population of changes that occurred during the period under review.
+3. Through judgmental selection, obtain and inspect change records to determine if the process was followed, as documented in the process/procedures.",,,,,,
+,,The potential risk that changes in the environment adversely affect operations is mitigated through monitoring of AWS assets.,"The enterprise utilizes monitoring solutions that provide detailed records of asset modifications. Modifications are retained for a sufficient amount of time. AWS Config records asset changes in designated CloudWatch events and S3 buckets, including: date of the change, the account making changes, results of the change and additional information supporting appropriateness of the change.",,,,"1. Interview responsible and/or accountable individuals to determine how the enterprise logs modifications to in-scope AWS applications and related resources (assets), and which assets are in scope. Inquire about:
+ • The level of detail captured by the monitoring solution
+ • Where records are sent
+ • How long they are retained
+ • Individuals with access to read/review any changes
+2. Document the AWS CloudWatch events and rules that are configured to capture AWS asset modifications.
+3. Document the AWS S3 bucket(s) where change modifications are recorded.
+4. Using evidence from the previous test, review a sample of asset changes that occurred in the period.
+5. Determine whether record of the change was documented by the appropriate CloudWatch event, stored in the associated S3 bucket and included sufficient detail as required by the business.
+6. Examine retention periods for the change records to ensure they will be available if needed during an investigation. (Verify In the AWS S3 dashboard: click the bucket of interest, click the ""Management"" Tab, then the ""Lifecycle"" subtab).",,,,,,
+,,The enterprise maintains the environment's integrity by establishing change schedules. ,"The enterprise has designated time periods for requested changes by priority and requires additional review and approvals for emergency changes.
+
+Note: Establishing change schedules based on priorities helps reduce enterprise chaos caused by change, and also facilitates identification of inappropriate changes.",,,,"1. Interview responsible and/or accountable individuals to determine if formal time periods have been designated for changes based on their enterprise designated priority (1, 2, 3, etc.). 
+2. Determine whether additional reviews and approvals are required for emergency changes that may occur.
+3. Determine which individuals are responsible for reviewing and approving emergency changes.
+4. Review the difference in volume between standard and emergency changes (i.e., are personnel abusing the emergency change process by declaring normal changes as emergencies? This can typically be identified by reviewing the total population of changes and examining percentage of change categorization.)
+5. Through judgmental selection, determine whether completed changes are being implemented during the designated time periods.",,,,,,
+"Identifying and Remediating
+Asset Vulnerabilities",,Potential risk regarding AWS application and related resource vulnerabilities is mitigated.,"The enterprise performs vulnerability assessments through the use of scans using enterprise-identified tools and on an enterprise-determined frequency. 
+
+Note: This control may be achieved through a variety of tools, such as CloudCheck, Netsparker or other tools provided by AWS. It may also involve manual checks via self-assessments or external audits.
+
+",,,,"1. Interview responsible and/or accountable individuals (security, infrastructure, etc.) to determine methods and/or frameworks used by the enterprise to identify, document and remediate vulnerabilities in AWS applications and related resources (assets).
+2. Determine who has access to vulnerability scanning tools, how output of scanning tools is interpreted and prioritized within the enterprise, and the degree and timeliness of remediation performed when vulnerabilities are discovered.
+3. Document the population of vulnerability scan outputs.
+4. Through judgmental selection, determine whether identified vulnerabilities have been remediated within the allowable timeframes stipulated by the enterprise.",,,,,,
+"External
+Penetration Testing",,Potential security weaknesses are identified through penetration testing.,The enterprise schedules and performs penetration testing in accordance with its predetermined frequency to identify and remediate vulnerabilities.  The enterprise contracts with external subject matter experts to identify and remediate AWS asset vulnerabilities in a timely manner.,,,,"1. Interview responsible and/or accountable individuals (security, infrastructure, etc.) to determine vendors, type (black box/white box, etc.), frequency and resources devoted to conducting penetration testing exercises. 
+2. Inquire about:
+• Individuals involved in setting the statement of work
+• How nondisclosure of vulnerabilities is handled
+• Individuals or departments within the organization that receive the final report
+• Responsibilities and timeliness for resolving identified vulnerabilities (confirmed, internally reviewed, assigned, etc.)
+3. Obtain and inspect penetration testing statements of work, schedules and final-report summaries (if available) to determine whether penetration testing exercises have been scheduled and completed as discussed.",,,,,,
+"Identifying and Removing
+Unnecessary Assets",,Enterprise objectives related to cost containment are supported through identification and removal of unnecessary assets in a timely manner.,"The enterprise has configured AWS CloudWatch alarms to identify assets no longer serving valid business purposes.
+
+Note: Alternatively, AWS Budgets can be leveraged to identify areas where enterprises might be overspending, by setting resource thresholds that inform users when services near or exceed the thresholds. AWS typically charges customers for services they use, but there are also costs associated with services that store information no longer needed by the business. Other non-AWS tools, such as Janitor Monkey, exist to identify unused AWS assets and automatically report them. ",,,,"1. Interview responsible and/or accountable individuals (operations management, infrastructure, finance, etc.) to determine methods used by the enterprise to identify AWS applications and related resources (assets) that are being charged to the enterprise but are not providing a business value.
+2. Inquire about:
+• AWS applications and related resources (assets) that are in scope
+• CloudWatch alarms configured for each AWS asset
+• Triggers that exist for each configured CloudWatch alarm (i.e., what limits are the enterprise monitoring per asset?)
+• Individuals who can set or modify CloudWatch alarms and triggers
+• Individuals who receive alarm output, once an alarm is triggered and the mechanism delivers the message (SNS topics, etc.)
+• Time limits and evaluation methods to determine whether an asset is to be removed
+• Length of time and location where triggered alarms are stored
+• Conditions triggering deletion of alarm messages
+3. Obtain documentation of the population of AWS assets that should have alarms configured. Through judgmental sampling, test to determine whether:
+ • CloudWatch alarms are configured 
+ • Alarm thresholds are configured in accordance with enterprise requirements 
+ • Alarms are configured to notify the appropriate group within the enterprise 
+ • Alarms trigger once the configured threshold is crossed 
+ • Timely investigation of alarms is conducted and corrective is taken",,,,,,
+"Defining Data Retention
+Requirements",,The enterprise has developed data retention and purge directives for AWS assets to ensure data are retained only for the time required by law or for business needs.,Data management policies and processes exist for AWS applications to manage enterprise life cycle requirements.,,,,"1. Interview responsible and/or accountable individuals (legal, security, operations management, etc.) to determine how the enterprise defines and programmatically enforces data retention and data-purging activities for individual AWS applications and related resources.
+2. Obtain and inspect data management policies. Through judgmental sampling, obtain and inspect evidence for each in-scope AWS asset demonstrating data-retention policies; archive or remove data in accordance with defined policies or documented configuration.",,,,,,
+,,,,,,,,,,,,,
+,,,,,,,,,,,,,

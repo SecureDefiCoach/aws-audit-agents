@@ -1,0 +1,66 @@
+﻿"Amazon Web Services® (AWS®) Audit Program
+Disaster Recovery",,,,,,,,,,,,
+"Process
+Sub-area",Ref. Risk,Control Objectives,Controls,Control Type,Control Classification,Control Frequency,Testing Step,Ref. Framework/ Standards,Ref. Workpaper,"Pass/
+Fail",Comments,
+"Disaster Recovery Plans:
+Stakeholder Input & Review",,"The enterprise mitigates the risk of being unable to resume operations when disaster occurs. 
+","The enterprise has an AWS disaster recovery (DR) plan which it reviews on a periodic basis for completeness and accuracy. On a periodic basis, enterprise management participates in disaster recovery exercises and provides feedback to the business continuity department.
+
+Note: DR is IT-operations focused, in distinction to business continuity, which is business-operations focused. Each may negatively affect the other, but the impact of disaster recovery on business operations is typically more severe. 
+DR plans should be developed that take a complete and accurate account of the potential impact resulting from disaster, as well as the needs of business operations affected by a disaster, as they recover. Actions documented and executed from the DR plan should seek to assist the business and its individual units in becoming acceptably functional in the least amount of time, at minimal cost.",,,,"1. Interview responsible and/or accountable individuals (business continuity, operational management, etc.) to determine level of required or actual participation of individual business units (sales, finance, AR, etc.), in the development and maintenance of the enterprise's disaster recovery activities. 
+2. Obtain and inspect disaster recovery plans, meeting minutes and/or recovery exercise summary reports to determine whether enterprise stakeholders are assisting the enterprise in creating  effective disaster recovery plans. Evidence of stakeholder involvement may include:
+• Timestamped signoffs on disaster recovery plans, procedures or related documentation
+• Documented meeting minutes and calendar invites 
+• Documented input from stakeholders that are later transcribed by the business continuity department into DR exercise reports",,,,,
+Business Continuity Plans (BCPs),,Business operations can continue in the event of significant business disruption or can recover from a disaster.,"The enterprise documents business continuity procedures and processes for individual business units to execute during disaster recovery.
+
+Note: Business units may have special procedures that need to be executed during or following IT-service restoration. Departmental knowledge of particular business systems or operations may facilitate order of execution by certain business units in a concerted or staggered fashion. These instances or circumstances should be detailed in individual procedures that are reviewed, refined and practiced during or near the time of disaster recovery exercises.
+
+[Robin: original statement in red above seemed garbled. Not sure I understood intent correctly.]",,,,"1, Interview responsible and/or accountable individuals (business continuity, operational management, etc.) to determine the:
+• Business-operational dependencies that may exist before or during certain stages of disaster recovery exercises
+• Potential unplanned events that the enterprise attempts to prepare for
+• Affected business processes that the enterprise may need to address through documented recovery instructions
+2. Inquire of personnel responsible for developing and maintaining individual business continuity plans regarding the frequency of:
+• Reviews of business continuity plans
+• Business continuity/disaster recovery exercises
+3. Obtain documentation of the population of business continuity plans by business unit or department with special attention to any missing business units or departments. Using a judgmental selection of business plans from this population, review the sample for:
+• Complete and accurate description of business critical processes requiring validation during or after a disaster
+• Detailed minimum level of recovery for individual processes or larger combined processes (for example, email capability required but fax capability not being required)
+• Detailed business process workarounds if primary methods remain unavailable
+• Documented practice exercises",,,,,
+High Availability,,"The enterprise mitigates the risk of disruption to operations when disaster occurs. 
+","The enterprise deploys critical AWS applications to multiple data centers physically secured by AWS.
+
+Note: AWS provides its services across multiple regions (large geographical areas such as Oregon) and availability zones (AWS-controlled data centers within the region). Enterprises can choose to deploy certain assets (such as an S3 bucket) to specific regions and availability zones for DR and availability purposes. For example, AWS Config and EC2 instances may be operational and deployed to the Northern Virginia region and certain data centers, but not in the Oregon region as required by the enterprise. This test seeks to determine whether critical assets are where they should be, and can remain available during a disaster.",,,,"1. Interview responsible and/or accountable individuals (architecture, networking, business continuity, etc.) to determine how the enterprise ensures or mitigates availability issues for its critical AWS applications during a disaster. Ensure that:
+ • AWS applications and data are not stored in regions (Canada, EU, Asia-Pacific, US, etc.) which may introduce regulatory concerns
+ • AWS applications and data are not deployed to availability zones lacking required security or configuration functionality
+ • Methods are used to detect and correct events related to the conditions above (or other undesirable states defined by the enterprise)
+2. Obtain documentation of the population of critical AWS applications. Through judgmental selection from this population, determine whether critical assets are completely and accurately fault tolerant and/or provide high availability through deployment to agreed-upon alternate locations (regions and availability zones, or other data centers)
+From the AWS Management Console:
+a. Select the AWS application or resource of interest.
+b. In the AWS Navigation Bar, scroll to the far right of the screen and click the down arrow next to the Region ""N. Virginia"", etc.
+3. Determine if resources are deployed appropriately through inspection of individual resources in multiple regions.",,,,,
+Alternating Responsible Personnel,,Disaster recovery responsibilities are shared and rotated routinely to maximize availability potential of the enterprise's AWS applications.,"Disaster recovery coordinators and core staff are cross-trained on their responsibilities and rotated on a periodic basis.
+
+Note: To ensure that appropriate knowledge and expertise are available when disaster strikes, multiple personnel should possess similar knowledge (possibly across multiple or very specific areas) sufficient to recover the enterprise's AWS applications and business processes. This may include two individuals with the same responsibilities or groups of three or more. These personnel should alternate between recovery exercises to ensure they adequately understand and can execute their responsibilities when needed.",,,,"1. Interview responsible and/or accountable individuals (business continuity, operational management, etc.) to determine the personnel, business units or departments that require alternate knowledge of business recovery processes and requirements.
+2. Obtain and inspect completed training and/or evidence showing responsible individuals executed assigned recovery responsibilities as dictated by the enterprise.",,,,,
+Validating Backups,,The enterprise's strategic objectives around data availability and integrity are met through formal data-protection and restoration planning. ,"The enterprise ensures critical data integrity through routinely scheduled test restorations of critical data (as part of the enterprise's periodic disaster recovery exercises).
+
+Note: The tests may center on critical data, generated in AWS applications, that are stored in third-party applications, vendor data centers or inside the enterprise's data center. Risk associated with backup-restoration failure can be tremendous and may require additional resources to deploy backup solutions such as Netapp.
+",,,,"1. Interview responsible and/or accountable individuals (business continuity, security, infrastructure, etc.) to determine if routine restoration of data backups occurs as part of disaster recovery efforts, to ensure backups will restore necessary data, if needed.
+2. Inquire about in-scope systems or data and how completeness and accuracy of backup restoration is measured and documented. 
+3. Obtain and inspect disaster recovery exercise reports to determine if in scope systems and data were restored as required. 
+4. Obtain and inspect backup solution reports indicating successful restoration for in-scope systems and data.",,,,,
+Managing Vendor Lock-in Risk,,The enterprise ensures continuity of operations by contracting with additional cloud providers.,"AWS applications and APIs are developed to be cross-compatible on multiple cloud platforms.
+
+Note: Cloud providers may engage in unacceptable practices or go out of business for various reasons (financial, breach, noncompetitive, etc.), leaving the enterprise with insufficient time to transfer or rebuild operations on another platform. Agile enterprises must ensure that they build and deploy cloud applications to transfer easily to another provider, if necessary.",,,,"1. Interview responsible and/or accountable individuals (business continuity, application development, infrastructure, etc.) to determine whether the AWS applications and related resources that the enterprise develops are completely and directly transferable to another cloud or noncloud provider (e.g., Azure®, Oracle®, Citrix®, etc.), and whether the enterprise spends time and effort ensuring that the alternate provider's platform provides a seamless business operational experience for enterprise users (internal or external).
+2. Inquire about:
+• The minimum level of business-application functionality that must be operational and available in order for the enterprise to continue providing its services, and which AWS applications and related resources (APIs, data in AWS applications, etc.) those business functions relate to
+• The degree of business functionality that exists and is operational on the alternate provider's platform
+3. Obtain and inspect disaster recovery reports indicating that failover tests, migrations or other functionality tests are routinely performed by the enterprise for critical AWS applications and related resources.
+4. Obtain and inspect vendor contracts demonstrating that the enterprise has contracted with an alternate cloud provider for a similar service offering (i.e., similar types and volume of services are expected).
+5. Observe critical business processes being completely and accurately executed on the alternate provider's platform. Alternatively, using a judgmental sample of business processes, request that the enterprise provide proof that business processes included in sample can be successfully executed on the alternate provider's platform.",,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,

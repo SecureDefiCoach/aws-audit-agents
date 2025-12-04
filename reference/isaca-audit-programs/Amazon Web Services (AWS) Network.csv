@@ -1,0 +1,84 @@
+﻿"Amazon Web Services® (AWS®) Audit Program
+Network Configuration and Management",,,,,,,,,,,
+"Process
+Sub-area",Ref. Risk,Control Objectives,Controls,Control Type,Control Classification,Control Frequency,Testing Step,Ref. Framework/ Standards,Ref. Workpaper,"Pass/
+Fail",Comments
+Maintaining Security Architecture & Network Traffic Baselines,,Network security architecture is baselined and supports the enterprise's security requirements.,AWS network security architecture is routinely reviewed and compared against enterprise-defined security requirements. Periodic reports are produced and sent to appropriate personnel for review. Any deficiencies are addressed in a timely manner.,,,,"1. Interview responsible and/or accountable personnel to determine whether a security network architecture standard exists and has been formally documented and applied to the environment.
+2. Determine the frequency of reviews that assess compliance of the network security architecture with the documented standard.
+3. Determine how compliance of the network security architecture with the documented standard is assessed (e.g., python scripts run Center for Internet Security® CIS® AWS security benchmarks daily and produce reports to security, etc.).
+3. Obtain and inspect completed compliance reviews and confirm that any instances of noncompliance are remediated in a timely manner.",,,,
+,,The enterprise can identify and take timely action against inappropriate network traffic.,The enterprise has deployed a security information and event management (SIEM) capability to define normal traffic patterns and report suspicious events to personnel in a timely manner. SIEM configuration and event logs are routinely assessed by the enterprise to ensure the tool functions as intended.,,,,"1. Interview responsible and/or accountable individuals (security, networking, etc.) to determine if network baselines have been established to facilitate an understanding of standard versus abnormal network behavior. Baselines may include indicators such as volume input/output, top resources or AWS applications that generate traffic on a daily basis, etc. Confirm the following:
+• Degree of automated versus manual capabilities that are used to define baselines, inspect traffic, record results and detect anomalies identified relative to established baselines
+• Retention of point-in-time baselines captured and secured for later analysis
+• Frequency of review used to ensure the baseline and alerting capability continues to function as intended
+• Timeliness of response/remediation by enterprise personnel to alerts received by the baselining capability
+2. Document population of AWS application and related resources captured by the network-baselining activity by obtaining population of baseline alerts or reporting configuration for each in-scope AWS application and related resource. Confirm that baselining occurs, has thresholds configured and is monitored (either automatically or manually) by personnel. Alternatively, the assessor may request that the enterprise generate certain types of traffic to trigger threshold alarms and observe that alerts are generated and sent to the appropriate personnel.
+",,,,
+,,The enterprise employs isolated network environments to ensure integrity of its various business operations.,"Separate AWS environments have been created to facilitate production, staging, test and development functions.",,,,"1. Interview responsible and/or accountable individuals (network architecture, engineering departments, etc.) to determine number of business environments that exist (production, stage, R&D, etc.) and where these environments have been deployed within the AWS network.
+2. Further determine how logical isolation of each environment is achieved, maintained and how noncompliance is detected.
+3. Obtain and inspect the following for each environment, testing for uniqueness:
+• AWS account numbers each environment is billed under
+• VPC-ID
+• Classless Interdomain Routing (CIDR) designations
+• Https login URLs
+4. Additional testing may focus on inspecting:
+• Deployed resources in each environment (EC2 or S3 bucket names, etc.)
+• User access (e.g., developers with access to production environment resources/applications, etc.)",,,,
+Environment Segregation,,Network communications are managed through a formal network traffic-management program.,"The enterprise restricts inbound and outbound AWS network traffic to interactions which serve valid business needs
+
+",,,,"1. Interview responsible and/or accountable individuals (infrastructure, networking, security, etc.) to determine the approach the enterprise takes to authorize network sources, destinations, ports, protocols, external enterprises, etc. 
+2. From the AWS Management Console, access the AWS Virtual Private Cloud (VPC) service and inspect the following elements for appropriateness:
+• Configured security groups (firewall rules) per VPC 
+• AWS subnets that exist per each VPC and business environment (prod, stage, etc.)
+• Routing tables in use per subnet 
+• Network access control lists
+• Internet gateways deployed and NAT configurations (servers and resources should not be publicly accessible but instead communicate through a single secured point)
+• Georestrictions applied to each VPC or AWS application (limiting certain IP address ranges from interacting with the AWS environment)
+• Configuration of subnets, security groups
+3. Access of external enterprises is routinely assessed for appropriateness leading to adjustments where necessary (e.g.,  remove unused firewall rules, remove former business partners or extranet connections, etc.).
+• VPC flow logs that monitor traffic among VPCs or out to other sources/destinations",,,,
+Restricting Administrative Access,,The enterprise provides privileged access to personnel in accordance with valid business need.,AWS Management tools are restricted to the department identified by the enterprise and provide personnel access based on the principle of least privilege.,,,,"1. Interview responsible and/or accountable individuals (security, operations management, etc.) to determine:
+• Types of administrative tools provided to enterprise personnel allowing them to access and manipulate the environment. Tool examples include, but are not limited to:
+   a) AWS root account 
+   b) AWS Management Console 
+   c) AWS Command Line Interface (CLI)
+   d) AWS Software Development Kits (SDKs)
+   e) PowerShell®
+• Method for restricting access to each tool based on least-privilege rights/permissions (e.g., AWS access associates to specifically assigned APIs that grant rights to resources and applications)
+• Request and authorization process for each administrative tool
+• Frequency of reviewing access provided to a given tool and individuals with access to each tool
+2. Document population of in-use tools, access rights/permissions and assigned individuals/access roles.
+3. Through judgmental sampling, obtain and inspect administrative tool access authorizations.
+4. Through judgmental sampling, obtain and inspect reviews of administrative tools access reviews.",,,,
+Maintaining Valid VPC Peering Connections,,Connectivity among AWS Virtual Private Clouds (VPCs) exist solely to serve appropriate enterprise business needs.,"VPC peering connections require management approval and are routinely assessed for appropriateness.
+
+Note: Peering connections can be established with external business partners who have an AWS account or established among other AWS accounts or VPCs. Peering connections should only exist for the time necessary to conduct valid business transactions.",,,,"1. Interview responsible and/or accountable individuals to determine:
+• Number of VPC peering connections that exist in the environment
+• AWS applications and levels of access granted to the peered connection
+• Business purpose(s) of the peering connection
+2. From the AWS Management Console, access the Virtual Private Cloud (VPC) service:
+a) Click ""VPC Peering Connections"".
+b) Inspect the ""Description"" tab to understand which AWS accounts made and accepted the peering connection(s) (explicit authorization is required between AWS accounts establishing peering connections)
+c) Inspect ""Tags"" tab to determine whether the use of the peering connection is defined
+d) Inspect ""Routing Tables"" columns to determine the network sources and destinations allowed through the peering connection. Inquire further for individual routing table appropriateness.
+3. Obtain and inspect routine reviews of the peering connection to ensure only valid connections remain in effect.",,,,
+"Network Redundancy
+Between the Enterprise
+and AWS",,"The enterprise maintains availability for AWS resources that depend on enterprise-managed IT systems.
+
+","Connectivity between the enterprise and AWS is fault tolerant through use of highly available VPN connections.
+
+Note: This control is important for enterprises that federate AWS access using local Active Directory® groups or other identity stores which do not exist within AWS and translate to an AWS IAM role or Amazon Cognito® user pool. Continuous, secure and highly available connectivity between the enterprise and AWS to facilitate these functions is the focus of the control testing.",,,,"1. Interview responsible and/or accountable individuals to determine whether AWS resources rely on IT assets (e.g., servers, databases, identity stores, etc.) that are physically located on the enterprise's premises and whether these resources are required for proper functioning of the AWS resources.
+2. Using the AWS Management Console, access the Virtual Private Cloud (VPC) service:
+a) Click ""Site to Site VPN"" connections.
+b) Inspect the number of VPN connections that are configured and where the devices are physically located:  device name usually indicates city or region where the device is located.
+c) If a VPN connection is not highly available, the AWS ""Site to Site VPN"" dashboard will inform the user via onscreen message. Alternatively, the ""Notifications"" section of the ""Site to Site VPN"" dashboard can be accessed; clicking ""Read Messages"" will display the message, if the condition is present.",,,,
+"Securely Integrating
+Enterprise Systems to AWS",,The enterprise leverages integration to simplify operational processes to achieve its strategic objectives.,"The enterprise has defined processes and procedures to integrate on premises systems and data with AWS applications and functionality.
+
+Note: There may be legacy systems or other on premises systems the enterprise cannot contractually migrate or is not willing to migrate to AWS that need security and availability controls. Testing to determine the population and general approach taken to migrate or integrate these systems should be sufficient for control-testing purposes.",,,,"1. Interview responsible and/or accountable individuals to determine what methods the enterprise uses to transfer, integrate or incorporate on premises systems and AWS applications or related resources.
+2. Obtain and inspect migration or data-transfer policies, procedures and/or processes to determine whether personnel are provided guidance and security requirements dictating network interactions between on premises systems communicating with AWS.",,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,

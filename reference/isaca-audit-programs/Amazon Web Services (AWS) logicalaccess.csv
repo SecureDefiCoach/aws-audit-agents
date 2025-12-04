@@ -1,0 +1,176 @@
+﻿"Amazon Web Services® (AWS®) Audit Program
+Logical Access Controls",,,,,,,,,,,
+"Process
+Sub-area",Ref. Risk,Control Objectives,Controls,Control Type,Control Classification,Control Frequency,Testing Step,Ref. Framework/ Standards,Ref. Workpaper,"Pass/
+Fail",Comments
+Securing Root Account Access,,Accountability and security of AWS-based business functions are achieved through restricted access to AWS root accounts.,"The enterprise disables AWS root account access and utilizes a secured password vault to control use of account credentials.
+
+Note: The AWS root account is an anonymous super-user account that cannot be restricted. Best practice is to disable access keys associated with these accounts and password-vault the associated password, granting access only on a restricted, need-to-know basis. There is a single root account for every individual AWS billed account.",,,,"1. Interview responsible and/or accountable individuals (security, operations management, infrastructure, etc.) to determine the methods used to secure and restrict the use of AWS root accounts that exist in the environment. 
+2. Inquire about:
+• Potential instances where root account usage may be required
+• Historical or actual instances where root account usage was required and subsequently utilized
+• Where the associated root account password is stored (network directory, physical/electronic password vault, etc.)
+• How use of the account is requested, approved and documented if usage is necessary
+• Monitoring used to track individuals who view or may attempt to access root account passwords
+• Whether AWS access keys are currently enabled or disabled for root accounts
+2. Obtain and inspect the AWS credential report for individual AWS root accounts. From the AWS Management Console, access the Identity & Access Management (IAM) service:
+a) On the left hand side of the screen, click ""Credential report"" then ""Download Report""
+b) Inspect the row for the user <root account> with specific attention to the following items: ""password enabled"", ""password last used"", ""Access Key 1 Active"", ""Access Key 1 Last Rotated"", ""Access Key 1 Last Used"" 
+c) Repeat access key validations for access key #2. 
+3. Obtain and inspect password vault access lists and inquire with management on their appropriateness; further determine whether views or modifications of the password are logged.",,,,
+,,The enterprise maintains integrity of AWS root accounts by implementing multifactor authentication.,AWS root accounts are configured to require multifactor authentication before they may be used.,,,,"1. Interview responsible and/or accountable individuals (security, operations management, infrastructure, etc.) to determine types of access protections applied to AWS root accounts and individuals with access to enable or disable these protections.
+2. Obtain and inspect access protections applied to AWS root accounts:
+From the AWS Management Console, access the Identity & Access Management service:
+a) Review the ""Security Status"" pane; the console will inform the user if multifactor authentication is enabled for the root account.
+b) Alternatively, on the left-hand side of the screen, click ""Credential Report"" then ""Download Report"".
+c) Review the status of the ""mfa_enabled"" column for the <root account> user.*
+
+*Center for Internet Security®, CIS Amazon Web Services Foundations, CIS Benchmarks™, v1.2.0, 23 May 2018, https://www.cisecurity.org/benchmark/amazon_web_services/",,,,
+Establishing Role-based Access,,Data confidentiality is ensured by managing access based on the level of access needed for users or network functions to perform their intended roles.,"The enterprise has developed and configured access roles to provision users or network services according to the principle of least privilege.
+
+Note: There can be hundreds of identity and access management (IAM) roles and even more permissions policies. For the sake of timely testing, the assessor may wish to focus on users, groups or access roles that provide privileged access, such as a system administrator or network administrator.",,,,"1. Interview responsible and/or accountable individuals (security, infrastructure, operations management, etc.) to determine how enterprise users are provided access to AWS applications and related resources.
+2. Inquire about:
+• Existing IAM users that are not part of any IAM access group or role, along with justification, if necessary
+• Level of documentation that exists for desired access groups, roles and permission policies (i.e., ask whether desired access documented is)
+• How permission policies are developed, approved and attached to IAM access groups or roles (for new or modified groups or roles)
+• Individuals responsible for creating or removing IAM users, groups, roles and attaching permission policies to IAM groups and roles
+• How least privilege is achieved and maintained for individual IAM access groups, roles and permission policies
+ • How privileged and nonprivileged access groups, roles and permission policies are identified and maintained 
+3. Obtain documentation of the population of:
+• IAM Users
+• IAM Groups
+• IAM Roles
+• IAM Permission Policies
+4. Through judgmental sampling, obtain and inspect IAM permission policies that are attached to individual IAM users, access groups and roles. Inquire further with management on appropriateness of permissions associated to individual roles included in the sample. Alternatively, the assessor may use management documentation that describes the permissions a given user, group or roles should possess and inspect the applied permissions directly using the IAM management console.
+",,,,
+Segregating Duties,,The enterprise maintains the integrity and confidentiality of AWS applications through identification and reduction of conflicting access.,"The enterprise has developed network-access baselines based on position responsibilities and generates alerts when modifications occur.
+
+Note: Examples of potential access conflicts include:
+• Software developers who have access to environments or toolsets allowing code deployments to production
+• System or network administrators who have full access to logging repositories or configurations",,,,"1. Interview responsible and/or accountable individuals (HR, security , operations management, etc.) to determine the approach the enterprise uses to prevent, detect and correct potential segregation of duties conflicts.
+2. Inquire about:
+• Documentation used to record undesired combinations of access by environment, department, job role or business function
+• Mechanisms used to authorize and monitor changes to AWS access roles and associated permissions
+• Frequency of review that occurs for changes in access or new applications that introduce potential access conflicts
+2. Obtain and inspect segregation-of-duties access matrix to determine if the enterprise has completely identified and documented undesirable access combinations for its work force.
+3. Obtain and inspect IAM groups, roles and permissions policies to determine if segregation of duties conflicts exist that are noncompliant with enterprise requirements.
+4. Observe (or obtain) and inspect alarms or alerts that notify personnel to access conflicts that occur in the environment through permissions policy modifications.",,,,
+Restricting Administrative Toolsets,,The enterprise maintains confidentiality and integrity of the environment by limiting administrative tools available to personnel.,"The ability to administer AWS applications is limited to authorized tools and users.
+
+Note: A variety of administrative tools are available to personnel who can administer the environment, including, but not limited to, the following:
+• AWS command-line interface
+• AWS Management Console
+• Microsoft® PowerShell®
+• Software development kits",,,,"1. Interview responsible and/or accountable individuals (security, infrastructure, operations management, etc.) to determine how enterprise personnel are authorized and provided access to enterprise approved administrative tools.
+2. Inquire about:
+• Users that can generate IAM access key to authenticate tools (composed of 2 parts, an access key ID and a secret access key)
+• The tools that are allowed for environmental administration
+• The tools that are not allowed for environmental administration
+• Methods used to identify use of noncompliant administrative tools
+• Methods in place to ensure personnel are using secure or current versions of administrative tools
+• Method of maintaining secure access to administrative tools
+• Tools authorized by department or job function (i.e., developers should only have software development kit access, for example)
+2.Obtain and inspect a list of administrative users within the environment (system administrators, network and server administrators, etc.), along with a list of approved toolsets for each user.
+3. Obtain and inspect tools assigned to IAM users:
+From the AWS Management Console, access the Identity & Access Management (IAM) service:
+a) Click ""Users"" then inspect the ""access key age"" column. Any values other than ""none"" indicate the user possesses valid access keys which must be supplied to either the command-line interface during installation, or to various software development kits (JavaScript, PHP, Ruby, etc.). Additional inquiry regarding whether individual users have installed are using SDKs to access or manipulate AWS applications will be required.
+b) Further inspect the ""Console Access"" columns to determine if the user has AWS Management Console access. The corresponding ""password"" column indicates age of the user's password.
+PowerShell® requires valid AWS account credentials to access AWS applications. Users can insecurely store credentials directly within scripts or in 1 of 2 credential stores on their workstation in the following locations. The assessor can choose to observe or inspect these locations for users of interest:
+• The AWS SDK store, which encrypts credentials and stores them in user's home folder. In Windows, this store is AppData\Local\AWS Toolkit\RegisteredAccounts.json
+• The credentials file, which is also located in the user's home folder, but stores credentials as plain text. 
+By default, the credentials file is stored here: C:\Users\username\.aws\credentials",,,,
+Removing Access ,,"Once identified, inappropriate access (e.g., access that no longer serves a business need) is completely removed in a timely manner.","AWS accounts are disabled after an enterprise-defined period of inactivity, then are removed, if necessary.",,,,"1. Interview responsible and/or accountable individuals (security, infrastructure, etc. ) to determine the mechanisms used to identify and disable inactive accounts.
+2. Document the population of in-scope users for the period.
+3. Obtain and inspect screenshots demonstrating that IAM users and/or associated access keys are deactivated following the enterprise-defined period of inactivity.",,,,
+Segregating Duties,,The enterprise ensures data confidentiality and security through password protection of user accounts accessing AWS applications. ,"The system enforces password policies which:
+• Require minimum password length
+• Constrain use of historical passwords
+• Require predefined password complexity",,,,"1. Interview responsible and/or accountable individuals (security, infrastructure, etc.) to determine the number of distinct user populations which exist to access the environment, password requirements for each population and how password requirements are enforced against each population of users (federated users that access AWS from the enterprise environment, IAM users, etc.)
+2. Obtain and inspect the password policy for each user population:
+For IAM users:
+From the AWS Management Console, access the Identity & Access Management (IAM) service:
+a) Click ""Account Settings"" and inspect the:
+- Minimum password length
+- Complexity settings (confirm that password requires one upper-case letter, one lower-case letter, number and nonalphanumeric value)
+- Enable password expiration and associated value.
+- Prevent password reuse and associated value of passwords to remember.
+For federated users:
+Obtain and inspect default domain-password policy to determine if it meets complexity, password age, history and length requirements.",,,,
+Assessing Access Roles & Permissions ,,The enterprise maintains appropriateness of access roles and related permissions policies through ongoing reviews and real-time monitoring.,"Amazon CloudWatch alarms are configured to alert the appropriate enterprise-defined department or individuals when AWS access roles or permissions are created or modified.
+Management reviews appropriateness of access provided to AWS access roles and associated permissions on a regular basis, as defined by the enterprise.
+
+Note: Real-time events related to creation or modifications to access roles and their permissions should focus on privileged groups such as system administrators or domain administrators. Modifications to these groups may indicate a network attack. Additionally, management or responsible individuals should conduct annual reviews of roles (regardless of any triggered monitoring alerts) to ensure that permissions associated to access roles serve valid business needs and do not allow inappropriate access.",,,,"1. Interview responsible and/or accountable individuals (security, infrastructure, operations management, etc.) to determine the approaches or mechanisms used by the enterprise to detect creations or modification events related to IAM users, groups, roles or permission policies.
+2. Inquire about: 
+ • Specific users, groups, roles or permissions policies that are in scope
+ • Individuals who are informed of creation or modification events for in scope items
+ • Timeliness of response
+ • History of these events and impacts
+ • Frequency of management review, documentation and approvals for IAM users, groups, roles and permissions policies 
+2. Obtain documentation of the population of in-scope users, groups, roles and permissions policies that are monitored. Through judgmental sampling, obtain and inspect configured event alarms noting the conditions triggering alarms and recipients of alarms.
+3. Obtain documentation of triggered alarms in the period. Through judgmental sampling, obtain and inspect documentation demonstrating that the alarms were sufficiently investigated by responsible individuals. 
+4. Obtain and inspect completed management reviews demonstrating that IAM users, groups, roles and permissions policies were completely reviewed for appropriateness, and that noted removals identified by management were processed in a timely manner.",,,,
+Delegating Access to External AWS Accounts,,The enterprise enforces AWS application confidentiality and integrity by requiring multifactor authentication.,"Privileged users and application programming interfaces (API) are required to authenticate to the network using multifactor authentication (MFA).
+
+Note: Validating API MFA may be done a variety of ways. The validation  outlined under the testing step, ""Validating MFA for APIs,"" reflects basic validation and only applies to AWS applications that can use temporary credentials.",,,,"1. Interview responsible and/or accountable individuals (security, infrastructure, etc.) to determine whether users and application programming interfaces (API) must supply additional credentials before they may interact with AWS applications and related resources.
+2. Inquire about:
+• In-scope users and APIs
+• Method and when additional authenticators are enforced (e.g., during user creation, after API deployment, etc.)
+• Individuals responsible for configuring and enforcing multifactor authentication (MFA)
+• Types of MFA devices or configurations that are used to secure user access and APIs
+3. Obtain documentation of the population of in-scope users and APIs.
+Validating MFA for users: 
+From the AWS Management Console, access the Identity & Access Management (IAM) service:
+a) Click ""Users"" then inspect the ""MFA"" column (Enabled or Not Enabled)
+Validating MFA for APIs:
+a) Document the population of users that are required to have an issued MFA device for in-scope API operations requiring MFA for API.
+b) Through judgmental sampling, obtain the permissions policies attached to the user and inspect the policy for the following policy condition for each in-scope API:
+1) Condition:
+""Bool"" : { ""aws:MultiFactorAuthPresent"" : ""True"" }
+This requires the API referenced in the Action section of the policy to MFA the associated user before the API may be used.",,,,
+,,"Management of external access to AWS applications through authorization ensures that actions taken are restricted to actions that have been approved for that particular role.
+
+
+
+ ","The enterprise creates and manages identity and access management (IAM) roles that external enterprises use to access AWS applications and related resources. Access is terminated in a timely manner when there is no longer a business need for the access.
+
+",,,,"1. Interview responsible and/or accountable individuals (operations management, vendor management, security, etc.), to determine the number of external enterprises and AWS accounts that are allowed access to the AWS environment.
+2. Inquire about the:
+• Exact method used to authorize, provide or delegate access (typically through an AWS IAM role solely controlled by the enterprise)
+• Types of permissions granted to external enterprise accounts
+• Individuals responsible for provisioning and communicating external AWS access
+• Frequency for reviewing appropriateness of connection and timeliness of removal (should business relationships change)
+• Monitoring of account usage (for example, AssumeRole API calls, along with associated principal identifiers, can be used to track usage)
+3. Obtain documentation of the population of external enterprises and associated roles with access to the AWS environment. Through judgmental sampling:
+a. Obtain and inspect related permissions policies attached to the roles and inquire with management on appropriateness of access.
+b. Obtain and inspect completed authorization forms and management reviews of external enterprise access.
+",,,,
+"Controlling Access
+to Cryptographic Keys",,The enterprise maintains confidentiality and integrity of cryptographic information by restricting access to appropriate individuals.,"The enterprise grants AWS Key Management Service (KMS) access to personnel (based on job responsibilities) and implements access based on the principle of least-privileged.
+
+The enterprise utilizes Amazon CloudTrail® to monitor AWS KMS API calls for appropriateness.
+
+Note: When using KMS, enterprises can control access by defining a resource-based policy known as the default key policy. 
+
+",,,,"1. Interview responsible and/or accountable individuals (security, infrastructure, etc.), to determine which users or departments are responsible for managing access to the enterprise's cryptographic key-management services.
+2. Inquire about:
+• The number of cryptographic keys that exist and what data are they meant to protect
+• Any cryptographic keys stored offsite with another provider and justification
+• How key policies are developed and applied to keys
+• How access is authorized and how frequently access is reviewed for appropriateness
+• Individuals with authority to change key policies
+• Existence of monitoring to generate alerts if key policies are modified
+2. Obtain documentation of the population of KMS Customer Managed Keys (CMK) and associated default key policies. Through judgmental  sampling:
+a. Obtain and inspect default key policies with specific attention to the principals and the actions each principal is allowed to take in order to determine whether they meet enterprise-defined access requirements.
+b. Obtain and review configuration of monitoring alarms to determine whether capabilities exist to alert appropriate personnel of inappropriate actions (e.g., copy or delete actions).
+",,,,
+"Enforcing
+Session Timeouts",,The enterprise ensures integrity of AWS application sessions by enforcing session timeouts.,"AWS user sessions time out after an interval defined by the enterprise.
+
+Note: This interval can span from 1 to 12 hours, and is controlled by the AWS Security Token Service.",,,,"1. Interview responsible and/or accountable individuals (security, infrastructure, etc.), to determine how long user sessions should persist (i.e., how long user sessions remain active), after becoming inactive.
+2. To validate AWS-user session-timeout values:
+From the AWS Management Console, access the identity and access management (IAM) service.
+a) Click ""Roles"" then inspect the ""Max CLI/API Session"" column value.
+b) Alternatively, the assessor may ask a given IAM user to login, mark the time they accessed the console or command-line interface then wait for the time specified to determine if a timeout occurs and forces reauthentication.",,,,
+System Use Notifications,,The enterprise ensures security and appropriate use of its network by defining and communicating expected behavior to users prior to granting user access.,"A system-use notification, outlining acceptable use, is presented to users and requires their acknowledgement before they are granted AWS application access.",,,,"1. Interview responsible and/or accountable individuals to determine whether a system notification is presented to users who are attempting to access AWS applications and related resources.
+2. Obtain and inspect an example of centralized configuration, demonstrating that the notification is presented to all users, and requires their acknowledgment, before users are allowed to proceed with AWS applications or related resource access.",,,,
+,,,,,,,,,,,

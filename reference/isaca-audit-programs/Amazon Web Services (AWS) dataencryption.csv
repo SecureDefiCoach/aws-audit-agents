@@ -1,0 +1,75 @@
+﻿"Amazon Web Services® (AWS®) Audit Program
+Data Encryption Controls",,,,,,,,,,,,
+"Process
+Sub-area",Ref. Risk,Control Objectives,Controls,Control Type,Control Classification,Control Frequency,Testing Step,Ref. Framework/ Standards,Ref. Workpaper,"Pass/
+Fail",Comments,
+Defining Encryption Requirements,,The enterprise applies appropriate encryption to individual data stores that is commensurate with business requirements ,The enterprise requires a minimum of AES 256-bit level encryption for data at rest and in transit.,,,,"1. Interview responsible and/or accountable individuals (security, operations management, etc.) to determine minimum levels of encryption that have been defined and documented for each AWS application in use and related resource(s). 
+Further inquiry should determine:
+• Existence and location of encryption requirements
+• Individuals or departments to whom the requirements are communicated
+• Frequency and methods used to assess compliance against the requirements
+• Automated mechanisms in place used to validate compliance or inform personnel of potential noncompliance
+2. Obtain and inspect documented encryption requirements defined by the enterprise to determine if all  AWS applications in use are included.",,,,,
+Encrypting Data by Classification ,,"The enterprise maintains data confidentiality through the application of encryption, as defined by data classification requirements.","The enterprise secures AWS data containers (S3 buckets, RedShift clusters, etc.), using client-side and server-side encryption.",,,,"1. Interview responsible and/or accountable individuals (security, operations management, etc.) to determine types (AES, TLS, etc.) of encryption that are applied based upon business-defined data classifications or other requirements for AWS applications. (May have been covered in previous interview. If not, proceed as follows.) 
+2. Obtain and inspect encryption settings for in-scope AWS applications and related resources. The following list contains some examples (but may not include specific containers) of interest to the assessor:
+Simple Storage Service - S3
+From the AWS Management Console, access the S3 service:
+a) Click on individual S3 buckets of interest.
+b) Click the ""Properties"" Tab).
+c) Inspect the ""Default Encryption"" property (None or AES 256).
+Dynamo Database - Dynamo DB creates data at rest protection if default settings are selected when creating a table
+From the AWS Management Console, access the DynamoDB service:
+a) Click the ""Dashboard"" option under ""Tables"".
+b) Select the Dynamo tables of interest.
+c) Click the ""Overview"" tab to access resource details.
+d) Check the ""Encryption"" configuration property (Disabled or Enabled).
+Redshift - Data at Rest
+From the AWS Management Console, access the Redshift service:
+a) Click ""Clusters"".
+b) Select Redshift clusters of interest and navigate to the cluster database properties.
+c) Verify the ""Encrypted"" property (Yes or No).",,,,,
+Securing Remote Connectivity,,The enterprise maintains data confidentiality and integrity for external network sources and destinations.,The enterprise requires encrypted connections for communications with external destinations.,,,,"1. Interview responsible and/or accountable individuals to determine (development, operations management, infrastructure, etc.) which AWS applications and related resources allow, or are configured to accept, external or public web connectivity. Further inquire which publicly facing AWS applications and related resources contain, process or transmit sensitive data. Some examples include:
+- AWS Redshift
+- AWS CloudFront Distributions
+- AWS S3
+2. Obtain and inspect SSL settings for in-scope AWS applications and related resources: 
+Redshift
+From the AWS Management Console, access the redshift service:
+a) Click ""Clusters"".
+b) Click the cluster(s) of interest.
+c) Click the ""Configuration"" tab, then ""Cluster Properties"" , then ""Parameter Group"".
+d) Under the ""Parameters"" tab, inspect the ""require_ssl"" property (True or False).
+CloudFront Distributions
+From the AWS Management Console, access the CloudFront Service:
+a) Click ""Distributions"" then the individual distributions of interest.
+b) Click ""Distribution Settings"" then the ""General"" Tab.
+c) Examine the ""Security Policy"" property. A value other than ""TLSv1"" or ""TLS_2016"" should be present. If either option is present the default CloudFront certificate may be selected for use (which is insecure, as TLS1.0 is exploitable). Inquire further to determine whether these security policies are present.
+Simple Storage Service - S3
+From the AWS Management Console, access the S3 service:
+a) Inspect the buckets of interest, then the ""Permissions"" tab.
+b) Click the ""Bucket Policy"" and inspect the listed policy configuration. 
+c) For any policies that allow a given resource access to the bucket in question, a false statement should be in effect if clients accessing the bucket do not have SSL transport set to ""TRUE"".
+d) An example is listed here: https://docs.aws.amazon.com/config/latest/developerguide/s3-bucket-ssl-requests-only.html 
+
+
+
+",,,,,
+"Detecting
+Misconfigured Encryption",,The enterprise maintains integrity of encryption status through use of monitoring.,The enterprise has developed capabilities to identify and respond to encryption failures or misconfigurations in a timely manner.,,,,"1. Obtain documentation of the population of CloudWatch events configured for each in-scope AWS application and related resource with specific attention to monitoring encryption status (at rest and in transit). Through judgmental sampling, obtain and inspect CloudWatch alarm configuration to determine:
+a) Whether changes to AWS application encryption status will generate alerts (SNS topics)
+b) To which department or individuals the alarms are sent
+2. From a judgmental sample of triggered alarms, determine timeliness of response.
+3. Determine how the alarming capability is maintained as AWS applications change or as new applications are introduced.",,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,
+,,,,,,,,,,,,

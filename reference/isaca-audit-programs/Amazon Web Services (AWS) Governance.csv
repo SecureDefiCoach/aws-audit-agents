@@ -1,0 +1,123 @@
+﻿"Amazon Web Services® (AWS®) Audit Program
+Governance",,,,,,,,,,,
+"Process
+Sub-area",Ref. Risk,Control Objectives,Controls,Control Type,Control Classification,Control Frequency,Testing Step,Ref. Framework/ Standards,Ref. Work paper,"Pass/
+Fail",Comments
+"Understanding Structure, Roles and Responsibilities",,Use of AWS® services is strictly for business purposes and advances the enterprise's mission and strategic objectives. ,"The enterprise has a formal and independent governance structure (an AWS steering committee) that exists to guide initial development and ongoing operations of the AWS program.
+
+Note: This group should be separate from the enterprise personnel performing daily or routine operations that utilize AWS services and applications. This group should also be responsible for consulting with the board of directors to establish objective compliance criteria, approval and understanding of all AWS applications in use (e.g., S3, EC2, Amazon Cognito®, etc.), methods to measure compliance and reporting structures among themselves, the board of directors and operational personnel who are accountable to this group.",,,,"1. Interview responsible and/or accountable individuals who oversee AWS services within the enterprise (Chief Operating Officer, Chief Security Officer, etc.) and determine if a formal governance structure exists to drive development and usage of AWS services
+2. Obtain and inspect documented enterprise organizational charts to determine if reporting and communication channels have been established between the board of directors, the governing body and personnel responsible for operating the AWS program
+3. Obtain and inspect AWS program charters or related documentation outlining:
+   a) Intended business purpose AWS services should achieve
+   b) Compliance criteria and/or platform requirements
+   c) Mechanisms used to measure program compliance or success (annual platform reviews, baselines/alerts, etc.)
+   d) Routine review of the program charter occurs between board of directors and the governance structure to ensure AWS services continue to meet business needs",,,,
+,,Alignment of AWS operations with AWS program requirements per the AWS steering committee is ensured through timely and ongoing clarity in roles and responsibilities.,"On a regular basis (defined by the enterprise), the AWS steering committee meets with operational management personnel to discuss AWS program status.
+
+Note: These meetings should focus on the:
+• Governance structure providing feedback to operational management
+• Formal communication of staffing and resource needs required to operate the platform in accordance with stakeholder needs
+• Challenges which operational management faces with security or program implementation
+• Compliance concerns (or other matters) that may generally impact achievement of stakeholder needs",,,,"Obtain and inspect calendar invites, meeting minutes and/or summary AWS program status reports to determine if the governance structure is regularly communicating with personnel who perform daily AWS program operations.",,,,
+,,Complete accountability is established over individual AWS applications and their related resources to ensure that the enterprise can meet stakeholders' expectations through a secure environment.,"The enterprise has designated application owners responsible for accurately configuring AWS applications, assessing related risk and performing maintenance of AWS applications and related resources as necessary.
+
+Note: AWS has dozens of individual application and service offerings with AWS application owners taking on custodial roles. AWS application owners may be a single individual or a department, or may span several departments or individuals across the enterprise. AWS applications (e.g., S3, EC2®, IAM, etc.) are subject to code changes (or changes in general) under the control of AWS. New services also emerge constantly that may integrate with existing services. It is important that the entire suite of AWS applications and their related resources (S3 buckets, EC2 instances, and IAM users or roles) are owned, and that their capabilities are fully understood, assessed and strictly maintained in accordance with enterprise requirements.
+
+",,,,"1. If not already available in security program documentation, interview responsible and/or accountable individuals to understand the entire collection of AWS applications in use and the corresponding individual(s) or department(s) who manage each application. 
+2. Further inquire with these individuals to understand how each service, related resources and configuration methodologies are used to meet documented security or business requirements. Further determine requirements for documenting, communicating and resolving noncompliant services.
+3. Obtain and inspect documentation describing intended business use of each service, completed risk assessments and/or completed reviews performed by individual AWS application owners documenting AWS application compliance and resolution (if necessary).",,,,
+Establishing AWS Directives,,The enterprise's information security program and related procedures (inclusive of AWS services) remain current and relevant in light of operational changes.,"The enterprise has developed formal security documentation (e.g., plans, policies and procedures) which incorporates the use of AWS services. Management performs an annual review of AWS security documentation in order to align documentation with operational changes to ensure completeness and accuracy.",,,,"1. Interview responsible and/or accountable individuals who maintain information security program plans or related documentation (e.g., chief security officer, etc.), to determine whether ongoing consideration is given to assessing, understanding, documenting and communicating security requirements for all AWS  applications in use.
+2. Obtain and inspect security-program documentation (e.g., security plan, policies, procedures, etc.), and determine whether existing documentation adequately describes:
+• AWS security requirements and how they are generally achieved
+• Instructions to personnel, detailing how to configure and maintain a compliant environment in accordance with documented requirements
+3. Further inspect the related documents and determine whether:
+• An owner is documented for each directive that exists
+• Documents are formally reviewed by management, at least annually, for completeness and accuracy",,,,
+,,"The enterprise has developed formal plans or policies and procedures for business critical AWS functions (including, but not limited to, change management and incident response).","The enterprise has developed formal change management, incident response and disaster recovery plans for AWS applications.",,,,"Interview individuals responsible and/or accountable for each policy/procedure that includes AWS services. Determine the frequency of plan (policy/procedure) review to ensure completeness/accuracy. Also, determine appropriateness of the following elements for each plan.
+a) Change management
+   1) Categories of changes (priority 1, 2, 3, emergency, etc.)
+   2) Required approvals per category
+   3) Documentation and retention period of change records
+   4) Approved change windows per change category
+   5) Testing requirements and back-out plans
+b) Security incident response
+   1) Phases of and responsibilities during an incident (discovery, investigation, communication, containment, eradication, recovery, etc.)
+   2) Crisis communication procedures
+   3) Call trees for necessary staff
+   4) Reporting requirements
+   5) Evidence collection, retention and postincident process for lessons learned and/or external reporting
+c) Disaster recovery
+   1) Identify completed business impact analysis (BIA)
+   2) Identify control measures to reduce risk (preventive, detective, corrective measures the enterprise will take)
+   3) Identify recovery strategies for critical enterprise and AWS applications
+   4) Identify recovery time objectives (RTO) per AWS application or related critical assets
+   5) Identify recovery point objectives (RPO) per AWS application or related critical assets
+   6) Identify documented recovery exercises to ensure the plan will work as intended along with plan maintenance",,,,
+Defining and Understanding Network Boundaries,,"The enterprise provides consistent levels of IT operational service through adequate network management, inclusive of AWS applications.","Management has documented network diagrams detailing all utilized AWS applications, data pathways and data participants. Diagrams are reviewed annually and updated as necessary.
+
+Note: Much like the human body and its various systems (musculoskeletal, central nervous system, etc.), appropriate network diagrams usually entail a series of layered diagrams that explain abstract—but related—concepts about the structure and flow of a given environment. In the case of AWS, it is important to understand the:
+• Number of root accounts in use
+• Number of virtual private clouds (VPCs) per root account
+• Regions each VPC has been deployed to (e.g., Northern Virginia; Frankfurt, Germany; etc.)
+• Peering connections between each VPC (if any)
+• Number of subnets per VPC
+• Configured gateways per VPC
+• Data riding along each connection",,,,"1. Interview responsible and/or accountable individuals (network architects or engineers) and determine the degree to which the overall AWS environment has been documented, with express attention to:
+   a) Number of root accounts the enterprise has in use and is paying Amazon for (confirm using detailed billing statement(s); each root account has an individual account number, e.g., 4356789101)
+   b) Number of virtual private clouds (VPCs) and the classless inter-domain routing (CIDR) notation of each VPC under each root account (each VPC will have a unique VPC-ID, if truly unique; CIDR will indicate how many subnets / networked hosts may exist within each VPC)
+   c) VPC peering connections that exist (peering connections allow inter-VPC connectivity from the same or different AWS root accounts)
+   d) individual AWS applications deployed to each individual VPC
+   e) placement and general configuration of Internet, customer or NAT gateways receiving internet or external network traffic
+   f) Business entities (parent enterprise, partner enterprises, extranets, etc.) that create, use or extract data (and the types of data traversing the network)
+2. Further inquire into the frequency of reviews for appropriateness of items above, and what criteria or methods are used to identify inappropriate network configurations, data flow, data types, in-use applications or network behavior.
+3. Obtain and inspect network diagrams and/or related documentation, and determine whether items described above are depicted and adequately described in each diagram. If the items are described in a diagram, determine whether data types, network pathways that data travels on and data recipients or participants are also depicted.",,,,
+Establishing a Complete and Accurate Inventory,,The enterprise manages security configuration weaknesses by maintaining a complete and accurate AWS inventory.,"AWS Config has been deployed to collect, display and report to management  all AWS applications and related resources in use.
+
+Note: AWS Config is capable of a 100-percent complete and accurate IT inventory for deployed AWS applications (S3, EC2, Redshift, etc.) and related resources (S3 buckets, EC2 instances, Redshift clusters). It is important to understand what exists before assets can be adequately protected and their benefits (relative to cost) are understood.",,,,"1. Interview responsible and/or accountable individuals (network infrastructure or security) to determine whether (and how) the IT Inventory is documented and maintained for completeness/accuracy. 
+If using AWS Config:
+   a) From AWS Management Console, click ""AWS Config."" The dashboard will populate with resources specific to the VPC and region.
+   b) On the left-hand side of the screen, click "" Settings."" Under ""Resource Types to Record,"" determine whether the following are selected:
+    1) Record All Resources Supported in This Region 
+    2) Include Global Resources (e.g., AWS IAM resources)
+   c) Determine whether a retention period is configured for changes made to AWS resources (If not, confirm that the default of 7 years is selected).
+   d) Determine whether an Amazon S3 bucket has been specified to store configuration changes to IT Assets recorded by AWS Config.
+    1) Locate and inspect the security settings for the specified S3 bucket to ensure that appropriate access security and data encryption configurations have been applied.
+   e) Determine whether an SNS Topic is configured along with a subscriber (i.e., an email address to appropriate personnel) that will be notified in the event IT assets configurations are changed 
+   f) Steps b) through e) should be repeated for each region where resources have been deployed (e.g., Ohio, Northern Virginia, Northern California, etc.)",,,,
+Classifying the IT Inventory,,The enterprise designs and applies asset protection commensurate with data classification.,"The enterprise has developed and maintains an AWS application-tagging strategy to aid in the identification, protection and data retention of IT assets (labels). The labels are applied to AWS assets to appropriately classify data and to ensure required protections.
+
+Note: AWS provides an ability to ""tag"" resources with custom labels. Tagging facilitates identification and grouping of assets by using common business terminology (such as ""confidential, sensitive, public, etc."") or by department and business use. Tagging further aids the enterprise in knowing which resources should have encryption applied or when data retention or data purge mechanisms should be triggered. A single tagging strategy should be developed, approved and used throughout the enterprise, to reduce confusion and misapplication of security controls or data classification based on tags.",,,,"1. Interview responsible and/or accountable individuals (operations management, application development, etc.) to determine if an AWS asset-tagging or labeling strategy exists and is formally documented. 
+2. Obtain and inspect tagging strategy documentation to understand the AWS tagging or labeling hierarchy and how it applies to individual AWS applications. 
+3. Through haphazard or random sampling, determine if the AWS tagging or labeling has been applied to assets as defined by the tagging strategy using the AWS Management Console.",,,,
+Accountability for IT Asset Acquisitions,,The enterprise purchases or acquires appropriate AWS services that support business goals and stakeholder needs.,"Purchases of AWS applications must be explicitly reviewed and approved by the appropriate, enterprise-defined department or group, prior to use.
+The business need for individual AWS applications is reviewed for appropriateness on a periodic basis, as defined by the enterprise.
+
+Note: AWS develops and releases new applications on a continuous basis (e.g., AWS Snowball®, AWS Glacier, AWS Glue, etc.). It is important for the enterprise to control expenses and approve the use only of those applications which the enterprise needs. Additionally, in order to control wasteful spending, the use of each application and its related resources should be reviewed on a routine basis to retire applications or resources that no longer serve a business need.",,,," 1. Interview responsible and/or accountable individuals (operations management, application development, purchasing, etc.) to determine the application-acquisition process for new AWS applications that the enterprise uses. Further determine:
+   a) Individuals required to review and approve purchases 
+   b) Method used to document and retain approvals
+   c) Level of involvement from accounts payable and purchasing personnel (determine whether these departments must also review for appropriateness)
+   d) Purchasing limits that may trigger additional review and approval (e.g., anything over US $2,500 requires CEO approval, etc.)
+   e) Which AWS applications in use have been subjected to the documented process (processes may have been developed after the environment was built)
+   f) Timing thresholds, frequency and methods used to review each AWS application for business-use validity. Note that business validity during the first year may be more challenging to determine.
+2. Build a population of services subjected to the documented process from step e). 
+3. Using a judgmental selection of AWS applications, determine whether the documented acquisition process has been followed.",,,,
+"Managing
+External Providers",,Engagement of external service providers does not jeopardize security expectations that the enterprise has established.,"External service providers who render in-scope services to the enterprise must agree to enterprise security requirements before access to AWS applications and sensitive data is allowed. These providers are also subject to routine security assessments.
+
+Note: Standard contract language, annual reviews of SOC reports or security questionnaires may satisfy this control.",,,,"1. Interview accountable and/or responsible individuals (vendor management office, legal, security, etc.), and obtain standard contract language used for external providers.
+2.Obtain a list of service providers and determine if standard contract language and assessment occurred prior to entering into agreement with third-party service providers.
+3. Confirm that the agreements selected for testing were fully executed prior to the external providers being granted access to AWS applications or related data.",,,,
+"Protecting
+AWS Root Accounts ",,The enterprise's strategic objectives are not delayed or disrupted by adverse actions resulting from unauthorized access.,"Interactions with Amazon Web Services® that involve enterprise accounts require authentication before information is provided or changed.
+AWS root accounts have security questions registered with AWS support to authenticate users requesting support.
+
+Note: This provides an additional layer of security that requires AWS support to challenge users who are attempting to obtain account information or change root-account passwords. The security questions and answers are NOT configured by default.",,,,"1. Interview responsible and/or accountable individuals (operations management, security, etc.) to determine which AWS roles can access the billing console to view or set the security questions, where answers may be stored, and which individuals know the answers. It may be ideal for 2-3 individuals to know the information and have access to update the information in the event one is unavailable.
+2. Verify AWS Management Console settings:
+   a) Navigate to the billing console for each root account in question: https://console.aws.amazon.com/billing/home?#/account/
+   b) Scroll down to the Configure Security Challenge Questions section.
+   c) Either questions are populated or a message indicating ""Security Questions Are Not Currently Enabled"" will be presented, indicating the security feature is not enabled.*
+
+*Center for Internet Security®, CIS Amazon Web Services Foundations, CIS Benchmarks™, v1.2.0, 23 May 2018, https://www.cisecurity.org/benchmark/amazon_web_services/",,,,
+,,,,,,,,,,,
+,,,,,,,,,,,
+,,,,,,,,,,,

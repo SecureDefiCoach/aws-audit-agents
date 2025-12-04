@@ -1,0 +1,187 @@
+{
+  "name": "CloudRetail Inc",
+  "business_type": "E-commerce Platform",
+  "services": [
+    "Online storefront with product catalog",
+    "Customer account management and order processing",
+    "Inventory management and supplier integration"
+  ],
+  "created_at": "2025-12-03T16:30:17.460317",
+  "infrastructure": {
+    "region": "us-east-2",
+    "iam_users": 5,
+    "s3_buckets": 3,
+    "ec2_instances": 2,
+    "vpc_configured": true,
+    "cloudtrail_enabled": true
+  },
+  "security_issues": [
+    {
+      "issue_type": "missing_mfa",
+      "resource_id": "admin-john",
+      "control_domain": "Logical Access",
+      "severity": "high",
+      "description": "Administrator account without MFA enabled"
+    },
+    {
+      "issue_type": "root_account_usage",
+      "resource_id": "admin-john",
+      "control_domain": "Governance",
+      "severity": "critical",
+      "description": "Regular use of root account for daily operations"
+    },
+    {
+      "issue_type": "overly_permissive_policy",
+      "resource_id": "dev-sarah",
+      "control_domain": "Logical Access",
+      "severity": "medium",
+      "description": "Developer with PowerUser access including ability to modify IAM"
+    },
+    {
+      "issue_type": "inactive_user",
+      "resource_id": "analyst-mike",
+      "control_domain": "Logical Access",
+      "severity": "low",
+      "description": "User account inactive for 90+ days but not disabled"
+    },
+    {
+      "issue_type": "no_expiration_date",
+      "resource_id": "contractor-alex",
+      "control_domain": "Logical Access",
+      "severity": "medium",
+      "description": "Contractor account with no expiration date or review schedule"
+    },
+    {
+      "issue_type": "old_access_key",
+      "resource_id": "contractor-alex",
+      "control_domain": "Logical Access",
+      "severity": "medium",
+      "description": "Access key not rotated in 180+ days"
+    },
+    {
+      "issue_type": "embedded_credentials",
+      "resource_id": "support-bot",
+      "control_domain": "Logical Access",
+      "severity": "high",
+      "description": "Service account with long-lived access keys instead of IAM role"
+    },
+    {
+      "issue_type": "unencrypted_bucket",
+      "resource_id": "cloudretail-customer-data",
+      "control_domain": "Data Encryption",
+      "severity": "critical",
+      "description": "Bucket containing customer PII without encryption at rest"
+    },
+    {
+      "issue_type": "no_access_logging",
+      "resource_id": "cloudretail-customer-data",
+      "control_domain": "Logging",
+      "severity": "high",
+      "description": "No S3 access logging enabled for audit trail"
+    },
+    {
+      "issue_type": "no_versioning",
+      "resource_id": "cloudretail-customer-data",
+      "control_domain": "Disaster Recovery",
+      "severity": "medium",
+      "description": "No versioning enabled for data recovery"
+    },
+    {
+      "issue_type": "public_bucket_no_logging",
+      "resource_id": "cloudretail-public-assets",
+      "control_domain": "Logging",
+      "severity": "medium",
+      "description": "Public bucket without access logging for security monitoring"
+    },
+    {
+      "issue_type": "overly_permissive_policy",
+      "resource_id": "cloudretail-public-assets",
+      "control_domain": "Network",
+      "severity": "medium",
+      "description": "Bucket policy allows public read without IP restrictions"
+    },
+    {
+      "issue_type": "unrestricted_ssh",
+      "resource_id": "cloudretail-web-server",
+      "control_domain": "Network",
+      "severity": "critical",
+      "description": "SSH port 22 open to the internet (0.0.0.0/0)"
+    },
+    {
+      "issue_type": "no_encryption_in_transit",
+      "resource_id": "cloudretail-web-server",
+      "control_domain": "Data Encryption",
+      "severity": "medium",
+      "description": "HTTP port 80 enabled without redirect to HTTPS"
+    },
+    {
+      "issue_type": "no_backup_configured",
+      "resource_id": "cloudretail-database-server",
+      "control_domain": "Disaster Recovery",
+      "severity": "high",
+      "description": "No automated backup or snapshot policy configured"
+    },
+    {
+      "issue_type": "no_monitoring_alarms",
+      "resource_id": "cloudretail-database-server",
+      "control_domain": "Logging",
+      "severity": "medium",
+      "description": "No CloudWatch alarms for CPU, disk, or availability"
+    },
+    {
+      "issue_type": "no_nat_gateway",
+      "resource_id": "cloudretail-vpc",
+      "control_domain": "Network",
+      "severity": "low",
+      "description": "Private subnet without NAT gateway may expose instances"
+    },
+    {
+      "issue_type": "single_region_logging",
+      "resource_id": "cloudretail-audit-trail",
+      "control_domain": "Logging",
+      "severity": "medium",
+      "description": "CloudTrail only enabled in one region, missing multi-region events"
+    },
+    {
+      "issue_type": "no_log_validation",
+      "resource_id": "cloudretail-audit-trail",
+      "control_domain": "Logging",
+      "severity": "medium",
+      "description": "Log file validation not enabled, logs could be tampered"
+    },
+    {
+      "issue_type": "short_log_retention",
+      "resource_id": "CloudWatch",
+      "control_domain": "Logging",
+      "severity": "medium",
+      "description": "CloudWatch logs retained for only 30 days, insufficient for compliance"
+    },
+    {
+      "issue_type": "security_alarms_disabled",
+      "resource_id": "CloudWatch",
+      "control_domain": "Incident Response",
+      "severity": "high",
+      "description": "Security monitoring alarms exist but are not enabled"
+    }
+  ],
+  "created_resources": {
+    "iam_users": [
+      "admin-john",
+      "dev-sarah",
+      "analyst-mike",
+      "contractor-alex",
+      "support-bot"
+    ],
+    "s3_buckets": [
+      "cloudretail-customer-data",
+      "cloudretail-application-logs",
+      "cloudretail-public-assets"
+    ],
+    "ec2_instances": [
+      "i-0a83a24c7601f4a2a",
+      "i-0fcd3504022d63be8"
+    ],
+    "vpc_id": "vpc-0cbf42f281cbaeefa",
+    "cloudtrail_name": "cloudretail-audit-trail"
+  }
+}

@@ -1,0 +1,32 @@
+﻿Amazon Web Services® (AWS®) Audit Program,,
+Column Name,Description,Instructions
+Process Sub-area,"An activity within an overall process influenced by the enterprise's policies and procedures that takes inputs from a number of sources, manipulates the inputs and produces outputs","To make the audit program manageable, it is recommended to break out the scope of the audit into sub-areas. The auditor can modify this field to include enterprise-specific names and terms. ISACA has used the most commonly used terms as the basis to develop this audit program."
+Ref. Risk,Specifies the risk this control is intended to address,"This field can be used to input a reference/link to risk described in the enterprise's risk register or enterprise risk management (ERM) system, or to input a description of the risk that a particular control is intended to address."
+Control Objectives,A statement of the desired result or outcome that must be in place to address the inherent risk in the review areas within scope,"This field should describe the behaviors, technologies, documents or processes expected to be in place to address the inherent risk that is part of the audit scope.
+
+An IS audit manager can review this information to determine whether the review will meet the audit objectives based on the risk and control objectives included in the audit program."
+Controls,"The means of managing risk, including policies, procedures, guidelines, practices or organizational structures, which can be of an administrative, technical, management or legal nature","This field should describe in detail the control activities expected to be in place to meet the control objective. Control activities can be reflected in roles and responsibilities, documentation, forms, reports, system configuration, segregation of duties, approval matrices, etc.
+
+An IS audit manager performing a quality control review must decide whether an auditor has planned to identify a sufficient number of controls on which to base an assessment and whether the planned evidence is sufficiently objective."
+Control Type,"Controls can be automated (technical), manual (administrative) or physical.
+
+• Automated/technical controls are managed or performed by computer systems.
+• Manual/administrative controls usually reflect processes or actions that employees can or cannot take.
+• Physical controls include locks, fences, mantraps and even geographic-specific controls.","Specify whether the control under review is automated, manual or physical. This information is useful in determining the testing steps necessary to obtain assessment evidence."
+Control Classification ,"Another way to classify controls is by the way they address a risk exposure.
+
+• Preventive controls should stop an event from happening.
+• Detective controls should identify an event after it has happened and generate an alert that triggers a corrective control.
+• Corrective controls should limit the impact of an event and help restore normal operations within a reasonable time frame.
+• Compensating controls are alternate controls designed to accomplish the intent of the original controls (as closely as possible) when the originally designed controls cannot be used due to limitations of the environment.","Specify whether the control under review is preventive, detective, corrective or compensating. This information will be helpful when defining testing steps and requesting evidence."
+Control Frequency,"Control activities can occur in real time, daily, weekly, monthly, annually, etc. ","Specify whether the control under review occurs in real time, daily, weekly, monthly, annually, etc. This information will be helpful when defining testing steps and requesting evidence."
+Testing Step,Identifies the steps being tested to evaluate the effectiveness of the control under review,"This field should describe in detail the steps necessary to test control activities and collect supporting documentation. The auditor can modify this field to meet enterprise-specific needs. ISACA has used a set of generic steps to develop this audit program.
+
+An IS audit manager may determine whether the proposed steps are adequate to review a particular control."
+Ref. Framework/Standards,"Specifies frameworks and/or standards that relate to the control under review (e.g., NIST, HIPAA, SOX, ISO)",Reference other frameworks used by the enterprise as part of its compliance program.
+Ref. Workpaper,This field usually references documents that contain evidence supporting the pass/fail mark for the audit step.,"Specify the location of supporting documentation detailing the audit steps and evidence obtained.
+
+An IS audit manager performing a quality control review must decide whether an auditor has tested a sufficient number of controls on which to base an assessment and whether the obtained evidence is sufficiently objective to support a pass or fail conclusion.
+"
+Pass/Fail,Document preliminary conclusions regarding the effectiveness of controls.,"Specify whether the overall control is effective (pass) or not effective (fail), based on the results of the testing."
+Comments,Free format field,Document any notes related to the review of this process sub-area or specific control activities.

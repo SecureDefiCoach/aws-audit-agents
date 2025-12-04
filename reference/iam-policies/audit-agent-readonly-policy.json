@@ -1,0 +1,116 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "IAMReadOnly",
+      "Effect": "Allow",
+      "Action": [
+        "iam:GetUser",
+        "iam:ListUsers",
+        "iam:GetUserPolicy",
+        "iam:ListUserPolicies",
+        "iam:ListAttachedUserPolicies",
+        "iam:GetPolicy",
+        "iam:GetPolicyVersion",
+        "iam:ListAccessKeys",
+        "iam:GetAccessKeyLastUsed",
+        "iam:ListMFADevices",
+        "iam:GetAccountSummary",
+        "iam:GenerateCredentialReport",
+        "iam:GetCredentialReport"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "S3ReadOnly",
+      "Effect": "Allow",
+      "Action": [
+        "s3:ListAllMyBuckets",
+        "s3:ListBucket",
+        "s3:GetBucketLocation",
+        "s3:GetBucketTagging",
+        "s3:GetEncryptionConfiguration",
+        "s3:GetBucketVersioning",
+        "s3:GetBucketLogging",
+        "s3:GetBucketPolicy",
+        "s3:GetBucketAcl",
+        "s3:GetBucketPublicAccessBlock",
+        "s3:GetObject",
+        "s3:GetObjectTagging"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "EC2ReadOnly",
+      "Effect": "Allow",
+      "Action": [
+        "ec2:DescribeInstances",
+        "ec2:DescribeInstanceStatus",
+        "ec2:DescribeSecurityGroups",
+        "ec2:DescribeVolumes",
+        "ec2:DescribeSnapshots",
+        "ec2:DescribeImages",
+        "ec2:DescribeKeyPairs",
+        "ec2:DescribeNetworkInterfaces",
+        "ec2:DescribeTags"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "VPCReadOnly",
+      "Effect": "Allow",
+      "Action": [
+        "ec2:DescribeVpcs",
+        "ec2:DescribeSubnets",
+        "ec2:DescribeRouteTables",
+        "ec2:DescribeInternetGateways",
+        "ec2:DescribeNatGateways",
+        "ec2:DescribeNetworkAcls",
+        "ec2:DescribeVpcPeeringConnections",
+        "ec2:DescribeVpcEndpoints",
+        "ec2:DescribeFlowLogs"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "CloudTrailReadOnly",
+      "Effect": "Allow",
+      "Action": [
+        "cloudtrail:DescribeTrails",
+        "cloudtrail:GetTrailStatus",
+        "cloudtrail:GetEventSelectors",
+        "cloudtrail:LookupEvents",
+        "cloudtrail:ListTags",
+        "cloudtrail:GetInsightSelectors",
+        "cloudtrail:ListPublicKeys"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "CloudWatchReadOnly",
+      "Effect": "Allow",
+      "Action": [
+        "cloudwatch:DescribeAlarms",
+        "cloudwatch:GetMetricStatistics",
+        "cloudwatch:ListMetrics",
+        "logs:DescribeLogGroups",
+        "logs:DescribeLogStreams",
+        "logs:GetLogEvents"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Sid": "CostMonitoring",
+      "Effect": "Allow",
+      "Action": [
+        "ce:GetCostAndUsage",
+        "ce:GetCostForecast",
+        "budgets:ViewBudget",
+        "budgets:DescribeBudgetAction",
+        "budgets:DescribeBudgetActionsForAccount",
+        "budgets:DescribeBudgetActionsForBudget"
+      ],
+      "Resource": "*"
+    }
+  ]
+}
