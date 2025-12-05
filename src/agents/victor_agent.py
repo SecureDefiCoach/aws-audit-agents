@@ -1,8 +1,9 @@
 """
-Victor Agent - Senior Auditor for Logging & Monitoring
+Victor Agent - Senior Auditor.
 
-Victor specializes in testing logging and monitoring controls in AWS environments.
-He has access to CloudTrail, CloudWatch, and VPC Flow Logs for evidence gathering.
+Victor is an autonomous LLM-powered Senior Auditor agent. He has access to
+CloudTrail, CloudWatch, and VPC Flow Logs for evidence gathering.
+Control domain assignments are made dynamically during audit planning.
 """
 
 from typing import Optional, Callable, Any
@@ -38,14 +39,16 @@ class AWSQueryTool:
 
 class VictorAgent(AuditAgent):
     """
-    Victor - Senior Auditor specializing in Logging & Monitoring.
+    Victor - Senior Auditor.
     
     Responsibilities:
-    - Test CloudTrail configurations
-    - Review CloudWatch monitoring
-    - Analyze VPC Flow Logs
-    - Assess incident response procedures
-    - Supervise Juman (Staff Auditor)
+    - Test assigned control domains
+    - Review configurations and evidence
+    - Analyze logs and data
+    - Assess procedures
+    - Supervise assigned staff auditors
+    
+    Control domain assignments are made dynamically during audit planning.
     """
     
     def __init__(
@@ -76,7 +79,7 @@ class VictorAgent(AuditAgent):
         # Initialize base agent
         super().__init__(
             name="Victor",
-            role="Senior Auditor - Logging & Monitoring",
+            role="Senior Auditor",
             llm_client=llm_client,
             tools=tools,
             knowledge_path=knowledge_path

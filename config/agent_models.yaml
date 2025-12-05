@@ -26,16 +26,12 @@ agents:
     model: gpt-4-turbo
     rationale: Reviews and approvals don't require most advanced model
   
-  # Senior Auditors (GPT-5 for complex reasoning)
+  # Senior Auditors (GPT-4 Turbo - GPT-5 not yet available)
   esther:
     name: Esther
-    role: Senior Auditor - IAM & Logical Access
-    model: gpt-5
-    control_domains:
-      - IAM
-      - Logical Access
-    staff_auditor: Hillel
-    rationale: Complex risk assessment and judgment calls require advanced reasoning
+    role: Senior Auditor
+    model: gpt-4-turbo
+    rationale: Complex risk assessment and judgment calls - using GPT-4 Turbo until GPT-5 access available
   
   chuck:
     name: Chuck
@@ -51,36 +47,27 @@ agents:
   
   victor:
     name: Victor
-    role: Senior Auditor - Logging & Monitoring
-    model: gpt-5
-    control_domains:
-      - Logging
-      - Monitoring
-      - Incident Response
-    staff_auditor: Juman
-    rationale: Log analysis and incident detection benefit from advanced reasoning
+    role: Senior Auditor
+    model: gpt-4-turbo
+    rationale: Log analysis and incident detection - using GPT-4 Turbo until GPT-5 access available
   
   # Staff Auditors (GPT-4 Turbo for routine tasks)
   hillel:
     name: Hillel
-    role: Staff Auditor - IAM Support
+    role: Staff Auditor
     model: gpt-4-turbo
-    reports_to: Esther
     rationale: Evidence collection and routine testing are well-suited for GPT-4 Turbo
   
   neil:
     name: Neil
-    role: Staff Auditor - Encryption & Network Support
+    role: Staff Auditor
     model: gpt-4-turbo
-    reports_to: TBD  # Will be assigned based on risk assessment
     rationale: Configuration checks and data gathering don't require GPT-5
-    note: Reporting structure pending - will be assigned to senior auditor based on controls selected
   
   juman:
     name: Juman
-    role: Staff Auditor - Logging Support
+    role: Staff Auditor
     model: gpt-4-turbo
-    reports_to: Victor
     rationale: Log collection and basic analysis work well with GPT-4 Turbo
 
 # Alternative Configurations

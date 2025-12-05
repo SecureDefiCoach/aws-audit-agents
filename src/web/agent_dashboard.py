@@ -198,6 +198,42 @@ def set_agent_goal(agent_name):
         return jsonify({"error": str(e)}), 500
 
 
+@app.route('/api/agents/<agent_name>/chat', methods=['POST'])
+def chat_with_agent(agent_name):
+    """Chat with an agent."""
+    if not team or agent_name not in team:
+        return jsonify({"error": f"Agent '{agent_name}' not found"}), 404
+    
+    try:
+        data = request.get_json()
+        message = data.get('message', '').strip()
+        
+        if not message:
+            return jsonify({"error": "Message cannot be empty"}), 400
+        
+        agent = team[agent_name]
+        
+        # Add user message to agent's memory
+        agent.memory.append({"role": "user", "content": message})
+        
+        # Get LLM response
+        response = agent.llm.chat(agent.memory)
+        
+        # Add response to memory
+        agent.memory.append({"role": "assistant", "content": response.content})
+        
+        return jsonify({
+            "success": True,
+            "agent_name": agent.name,
+            "response": response.content,
+            "tokens_used": response.tokens_used,
+            "cost": response.cost
+        })
+    
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
 @app.route('/api/agents/<agent_name>/export')
 def export_agent_state(agent_name):
     """Export agent state to JSON."""

@@ -1,9 +1,9 @@
 """
-Esther - Senior Auditor for IAM & Logical Access.
+Esther - Senior Auditor.
 
-Esther is an autonomous LLM-powered agent specializing in Identity and
-Access Management (IAM) audits. She assesses IAM risks, collects evidence,
-and documents findings in professional workpapers.
+Esther is an autonomous LLM-powered Senior Auditor agent. She assesses risks,
+collects evidence, and documents findings in professional workpapers.
+Control domain assignments are made dynamically during audit planning.
 """
 
 from typing import Dict, Any, Optional, List
@@ -156,14 +156,16 @@ class IAMTool(Tool):
 
 class EstherAgent(AuditAgent):
     """
-    Esther - Senior Auditor specializing in IAM & Logical Access.
+    Esther - Senior Auditor.
     
     Esther is an autonomous agent who:
-    - Assesses IAM risks for AWS accounts
-    - Collects evidence about users, roles, and policies
-    - Analyzes access controls and identifies weaknesses
+    - Assesses risks for AWS accounts
+    - Collects evidence based on assigned controls
+    - Analyzes controls and identifies weaknesses
     - Documents findings in professional workpapers
     - Adapts her approach based on what she discovers
+    
+    Control domain assignments are made dynamically during audit planning.
     """
     
     def __init__(
@@ -185,7 +187,7 @@ class EstherAgent(AuditAgent):
         # Initialize base agent
         super().__init__(
             name="Esther",
-            role="Senior Auditor - IAM & Logical Access",
+            role="Senior Auditor",
             llm_client=llm_client,
             tools=[],
             knowledge_path=knowledge_path
@@ -201,13 +203,97 @@ class EstherAgent(AuditAgent):
         self.register_tool(WorkpaperTool(f"{output_dir}/workpapers"))
         self.register_tool(EvidenceTool(f"{output_dir}/evidence"))
         
-        # Esther's specialization
-        self.control_domains = ["IAM", "Logical Access", "Authentication", "Authorization"]
-        self.staff_auditor = "Hillel"  # Esther's staff auditor
+        # Control domains and staff assignments are made dynamically
+        self.control_domains = []  # Assigned during audit planning
+        self.staff_auditor = None  # Assigned during audit planning
         
         # Workpaper tracking
         self.workpapers_created: List[str] = []
         self.evidence_collected: List[str] = []
+        
+        # Re-initialize system message with Esther's custom prompt
+        self.memory = []
+        self._init_system_message()
+    
+    def _init_system_message(self):
+        """Initialize Esther's custom system message with audit manager defined capabilities."""
+        import json
+        
+        system_msg = """You are Esther, an autonomous audit agent specializing in IAM and Logical Access. You independently reason about audit objectives, evaluate identity and access management controls, and produce professional audit documentation. You collaborate with other agents when necessary to complete audit procedures efficiently and accurately.
+
+## Core Capabilities
+
+### 1. Independent Audit Reasoning
+- Understand audit objectives for IAM, provisioning, deprovisioning, role-based access, MFA, privileged access, and periodic access reviews.
+- Determine the correct next step based on evidence, risk, and findings.
+- Adjust your approach when new information changes the control evaluation.
+
+### 2. Evidence Collection & AWS Access Analysis
+Use inspection tools to analyze AWS IAM, including:
+- Users, roles, policies, permissions, access keys
+- MFA enforcement
+- Password and key rotation settings
+- Privileged access patterns
+- CloudTrail logs relevant to authentication and authorization
+
+Collect screenshots, configuration outputs, and logs as required evidence.
+Identify gaps, misconfigurations, or control breakdowns.
+
+### 3. Professional Documentation
+Produce clear audit workpapers documenting:
+- Procedures performed
+- Evidence collected
+- Reasoning and conclusions
+- Exceptions or control weaknesses
+
+Maintain a structured audit trail for every decision.
+Write in a professional, concise format suitable for external review.
+
+### 4. Collaboration With Other Agents
+- Coordinate with the IT Manager Agent, AWS Evidence Collector Agent, and the Lead Auditor Agent when additional context or assistance is needed.
+- Request clarification or follow-up information from other agents when evidence is incomplete.
+- Communicate findings or risks that impact other audit domains.
+
+## Available Tools
+"""
+        # Add tools dynamically
+        system_msg += self._format_tools_for_prompt()
+        
+        # Add knowledge context
+        system_msg += "\n\n" + self.get_knowledge_context()
+        
+        # Add required JSON response format instructions
+        system_msg += """
+
+## Response Format
+
+When you decide to use a tool, respond with a JSON object:
+{
+    "action": "use_tool",
+    "tool": "tool_name",
+    "parameters": {"param1": "value1", "param2": "value2"},
+    "reasoning": "Why you're using this tool"
+}
+
+When you've completed your goal, respond with:
+{
+    "action": "goal_complete",
+    "summary": "What you accomplished",
+    "next_steps": "Any recommendations or follow-up needed"
+}
+
+When you need to document findings, respond with:
+{
+    "action": "document",
+    "content": "Your findings and analysis",
+    "reasoning": "Your thought process"
+}
+
+Always explain your reasoning. Your thought process is as important as your actions.
+
+When following procedures from your knowledge base, reference which procedure you're using in your reasoning.
+"""
+        self.memory.append({"role": "system", "content": system_msg})
     
     def create_workpaper(
         self,

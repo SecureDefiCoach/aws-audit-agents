@@ -486,6 +486,150 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        /* Chat Interface Styles */
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            height: 500px;
+            background: #f9f9f9;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .chat-message {
+            display: flex;
+            flex-direction: column;
+            max-width: 80%;
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .chat-message.user {
+            align-self: flex-end;
+        }
+
+        .chat-message.agent {
+            align-self: flex-start;
+        }
+
+        .chat-message-header {
+            font-size: 0.75rem;
+            color: #666;
+            margin-bottom: 0.25rem;
+            font-weight: 600;
+        }
+
+        .chat-message-content {
+            padding: 0.75rem 1rem;
+            border-radius: 12px;
+            line-height: 1.5;
+        }
+
+        .chat-message.user .chat-message-content {
+            background: #667eea;
+            color: white;
+            border-bottom-right-radius: 4px;
+        }
+
+        .chat-message.agent .chat-message-content {
+            background: white;
+            color: #333;
+            border: 1px solid #e0e0e0;
+            border-bottom-left-radius: 4px;
+        }
+
+        .chat-input-container {
+            display: flex;
+            gap: 0.5rem;
+            padding: 1rem;
+            background: white;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        #chat-input {
+            flex: 1;
+            padding: 0.75rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        #chat-input:focus {
+            border-color: #667eea;
+        }
+
+        .send-btn {
+            padding: 0.75rem 1.5rem;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+
+        .send-btn:hover {
+            background: #5568d3;
+        }
+
+        .send-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .chat-loading {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1rem;
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            border-bottom-left-radius: 4px;
+            max-width: 80px;
+        }
+
+        .chat-loading-dot {
+            width: 8px;
+            height: 8px;
+            background: #667eea;
+            border-radius: 50%;
+            animation: bounce 1.4s infinite ease-in-out both;
+        }
+
+        .chat-loading-dot:nth-child(1) {
+            animation-delay: -0.32s;
+        }
+
+        .chat-loading-dot:nth-child(2) {
+            animation-delay: -0.16s;
+        }
+
+        @keyframes bounce {
+            0%, 80%, 100% {
+                transform: scale(0);
+            }
+            40% {
+                transform: scale(1);
+            }
+        }
     </style>
 </head>
 <body>
@@ -506,7 +650,7 @@
                 </div>
                 <div class="phase-box not-started" id="phase-2">
                     <div class="phase-number"><span>2</span></div>
-                    <div class="phase-title">Audit Program</div>
+                    <div class="phase-title">Control Testing</div>
                     <div class="phase-subtitle">Not Started</div>
                 </div>
                 <div class="phase-box not-started" id="phase-3">
@@ -571,6 +715,7 @@
                     <div class="tab" onclick="switchTab('tasks')">Tasks</div>
                     <div class="tab" onclick="switchTab('actions')">Actions</div>
                     <div class="tab" onclick="switchTab('memory')">Memory</div>
+                    <div class="tab" onclick="switchTab('chat')">Chat</div>
                 </div>
                 
                 <div class="tab-content active" id="info-tab">
@@ -595,6 +740,16 @@
                 
                 <div class="tab-content" id="memory-tab">
                     <div id="agent-memory"></div>
+                </div>
+                
+                <div class="tab-content" id="chat-tab">
+                    <div class="chat-container">
+                        <div class="chat-messages" id="chat-messages"></div>
+                        <div class="chat-input-container">
+                            <input type="text" id="chat-input" placeholder="Type your message..." onkeypress="handleChatKeyPress(event)">
+                            <button onclick="sendChatMessage()" class="send-btn">Send</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1065,6 +1220,9 @@
                 loadAgentActions(currentAgent);
             } else if (tabName === 'memory') {
                 loadAgentMemory(currentAgent);
+            } else if (tabName === 'chat') {
+                // Load chat history for this agent
+                loadChatHistory(currentAgent);
             }
         }
 
@@ -1145,6 +1303,147 @@
             loadAgents();
             loadPhaseStatus();
         }, 5000);
+
+        // Chat functionality - separate history per agent
+        let chatHistories = {}; // Store chat history per agent
+        let currentChatAgent = null;
+
+        function handleChatKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendChatMessage();
+            }
+        }
+
+        async function sendChatMessage() {
+            const input = document.getElementById('chat-input');
+            const message = input.value.trim();
+            
+            if (!message || !currentAgent) return;
+            
+            // Clear input
+            input.value = '';
+            
+            // Add user message to chat
+            addChatMessage('user', 'You', message);
+            
+            // Show loading indicator
+            const loadingId = addChatLoading();
+            
+            // Disable input while waiting
+            input.disabled = true;
+            document.querySelector('.send-btn').disabled = true;
+            
+            try {
+                const response = await fetch(`/api/agents/${currentAgent}/chat`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ message: message })
+                });
+                
+                const data = await response.json();
+                
+                // Remove loading indicator
+                removeChatLoading(loadingId);
+                
+                // Add agent response
+                if (data.response) {
+                    addChatMessage('agent', data.agent_name, data.response);
+                } else if (data.error) {
+                    addChatMessage('agent', 'System', `Error: ${data.error}`);
+                }
+            } catch (error) {
+                removeChatLoading(loadingId);
+                addChatMessage('agent', 'System', `Error: ${error.message}`);
+            } finally {
+                // Re-enable input
+                input.disabled = false;
+                document.querySelector('.send-btn').disabled = false;
+                input.focus();
+            }
+        }
+
+        function addChatMessage(type, sender, content) {
+            const messagesDiv = document.getElementById('chat-messages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `chat-message ${type}`;
+            messageDiv.innerHTML = `
+                <div class="chat-message-header">${sender}</div>
+                <div class="chat-message-content">${escapeHtml(content)}</div>
+            `;
+            messagesDiv.appendChild(messageDiv);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            
+            // Store in agent-specific history
+            if (currentAgent) {
+                if (!chatHistories[currentAgent]) {
+                    chatHistories[currentAgent] = [];
+                }
+                chatHistories[currentAgent].push({ type, sender, content });
+            }
+        }
+
+        function addChatLoading() {
+            const messagesDiv = document.getElementById('chat-messages');
+            const loadingDiv = document.createElement('div');
+            const loadingId = 'loading-' + Date.now();
+            loadingDiv.id = loadingId;
+            loadingDiv.className = 'chat-message agent';
+            loadingDiv.innerHTML = `
+                <div class="chat-loading">
+                    <div class="chat-loading-dot"></div>
+                    <div class="chat-loading-dot"></div>
+                    <div class="chat-loading-dot"></div>
+                </div>
+            `;
+            messagesDiv.appendChild(loadingDiv);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            return loadingId;
+        }
+
+        function removeChatLoading(loadingId) {
+            const loadingDiv = document.getElementById(loadingId);
+            if (loadingDiv) {
+                loadingDiv.remove();
+            }
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function clearChat() {
+            document.getElementById('chat-messages').innerHTML = '';
+            if (currentAgent) {
+                chatHistories[currentAgent] = [];
+            }
+        }
+        
+        function loadChatHistory(agentName) {
+            // Clear the display
+            document.getElementById('chat-messages').innerHTML = '';
+            
+            // Load history for this agent if it exists
+            if (chatHistories[agentName] && chatHistories[agentName].length > 0) {
+                chatHistories[agentName].forEach(msg => {
+                    const messagesDiv = document.getElementById('chat-messages');
+                    const messageDiv = document.createElement('div');
+                    messageDiv.className = `chat-message ${msg.type}`;
+                    messageDiv.innerHTML = `
+                        <div class="chat-message-header">${msg.sender}</div>
+                        <div class="chat-message-content">${escapeHtml(msg.content)}</div>
+                    `;
+                    messagesDiv.appendChild(messageDiv);
+                });
+                document.getElementById('chat-messages').scrollTop = document.getElementById('chat-messages').scrollHeight;
+            } else {
+                // Show greeting for new chat
+                addChatMessage('agent', agentName, 'Hello! How can I help you today?');
+            }
+        }
     </script>
 </body>
 </html>

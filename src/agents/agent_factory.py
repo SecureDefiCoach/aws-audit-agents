@@ -15,6 +15,10 @@ from .tools import WorkpaperTool, EvidenceTool
 from .esther_agent import EstherAgent
 from .chuck_agent import ChuckAgent
 from .victor_agent import VictorAgent
+from .maurice_agent import MauriceAgent
+from .hillel_agent import HillelAgent
+from .neil_agent import NeilAgent
+from .juman_agent import JumanAgent
 from ..aws.iam_client import IAMClient
 from ..aws.s3_client import S3Client
 from ..aws.ec2_client import EC2Client
@@ -135,6 +139,34 @@ class AgentFactory:
                 llm_client=llm,
                 cloudtrail_client=cloudtrail_client,
                 vpc_client=vpc_client,
+                output_dir="output",
+                knowledge_path=knowledge_path
+            )
+        elif agent_name_lower == 'maurice':
+            # Create Maurice as Audit Manager
+            agent = MauriceAgent(
+                llm_client=llm,
+                output_dir="output",
+                knowledge_path=knowledge_path
+            )
+        elif agent_name_lower == 'hillel':
+            # Create Hillel as Staff Auditor for IAM Support
+            agent = HillelAgent(
+                llm_client=llm,
+                output_dir="output",
+                knowledge_path=knowledge_path
+            )
+        elif agent_name_lower == 'neil':
+            # Create Neil as Staff Auditor for Encryption & Network Support
+            agent = NeilAgent(
+                llm_client=llm,
+                output_dir="output",
+                knowledge_path=knowledge_path
+            )
+        elif agent_name_lower == 'juman':
+            # Create Juman as Staff Auditor for Logging Support
+            agent = JumanAgent(
+                llm_client=llm,
                 output_dir="output",
                 knowledge_path=knowledge_path
             )
